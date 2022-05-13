@@ -20,12 +20,6 @@
     "env": "vc env pull .env.local",
     "prepare": "husky install"
   },
-  "postcss": {
-    "plugins": {
-      "tailwindcss": {},
-      "autoprefixer": {}
-    }
-  },
   "dependencies": {
     "next": "12.1.5",
     "react": "18.1.0",

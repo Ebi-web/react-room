@@ -1,0 +1,13 @@
+{
+  "extends": [
+    "eslint:recommended",
+    "next"
+  ],
+  "rules": {
+    "no-var": "error"
+  },
+  "env": {
+    "browser": true,
+    "es6": true
+  }
+}
