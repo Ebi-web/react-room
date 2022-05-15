@@ -1,7 +1,7 @@
 interface Task {
   taskId: string, // ulid
   taskName: string,
-  dueDate: Date
+  dueDate: string // YYYY-MM-DD
 }
 
 export {
