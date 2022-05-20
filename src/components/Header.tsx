@@ -1,11 +1,11 @@
-import { FC } from 'react'
+import { FC } from "react";
 
 const Header: FC = () => {
   return (
-    <header className="h-10 p-2 bg-blue-300">
-      Header Component(とりあえず)
+    <header className="p-5 bg-blue-300">
+      <p className="items-center">React ToDo</p>
     </header>
-  )
-}
+  );
+};
 
-export default Header
+export default Header;
