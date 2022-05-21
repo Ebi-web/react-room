@@ -3,7 +3,6 @@ import { ulid } from 'ulid'
 
 import type { Task } from '../types/Task'
 
-
 interface TaskAddProps {
   addTask: (task: Task) => void
 }
@@ -14,18 +13,18 @@ const TaskAdd: FC<TaskAddProps> = (props) => {
   const [errorText, setErrorText] = useState('')
 
   const addTaskLocal = () => {
-    if(inputTaskName === "") {
+    if (inputTaskName === '') {
       setErrorText('タスク名が入力されていません')
-      return;
+      return
     }
-    if (inputDate === "") {
+    if (inputDate === '') {
       setErrorText('タスク締切が入力されていません')
-      return;
+      return
     }
     const newTask: Task = {
       taskId: ulid(),
       taskName: inputTaskName,
-      dueDate: inputDate
+      dueDate: inputDate,
     }
     props.addTask(newTask)
     // reset
@@ -41,8 +40,8 @@ const TaskAdd: FC<TaskAddProps> = (props) => {
           <input
             type="text"
             value={inputTaskName}
-            className="w-30"
-            onChange={event => setInputTaskName(event.target.value)}
+            className=" w-52 rounded-md"
+            onChange={(event) => setInputTaskName(event.target.value)}
           />
         </div>
         <div className="m-5">
@@ -50,21 +49,21 @@ const TaskAdd: FC<TaskAddProps> = (props) => {
           <input
             type="date"
             value={inputDate}
-            onChange={event => {setInputDate(event.target.value)}}
+            className="rounded-md"
+            onChange={(event) => {
+              setInputDate(event.target.value)
+            }}
           />
         </div>
         <button
-          className="border-2 m-5 p-2"
+          type="submit"
+          className="border-2 m-5 p-2 rounded-md shadow-md hover:shadow-none"
           onClick={addTaskLocal}
-        >追加</button>
+        >
+          追加
+        </button>
       </div>
-      {
-        (errorText)? (
-          <div
-            className="bg-red-200 m-1 p-1"
-          >{errorText}</div>
-        ) : ''
-      }
+      {errorText ? <div className="bg-red-200 m-1 p-1">{errorText}</div> : ''}
     </div>
   )
 }
