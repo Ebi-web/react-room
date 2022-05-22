@@ -7,7 +7,7 @@ interface TaskClearProps {
 const TaskClear: FC<TaskClearProps> = (props) => {
   return (
     <button className="border-2 m-5 p-2" onClick={props.clearTaskList}>
-      Clear
+      削除
     </button>
   )
 }
