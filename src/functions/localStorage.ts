@@ -14,7 +14,4 @@ const setTaskListToLocalStorage = (taskList: Task[]) => {
   localStorage.setItem(TASK_LIST_NAME, JSON.stringify(taskList))
 }
 
-export {
-  getTaskListFromLocalStorage,
-  setTaskListToLocalStorage
-}
+export { getTaskListFromLocalStorage, setTaskListToLocalStorage }

@@ -1,2 +1,3 @@
 # react-room
-React部屋で作るTodoアプリケーション
+
+React 部屋で作る Todo アプリケーション
