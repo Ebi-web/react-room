@@ -45,7 +45,7 @@ describe('TaskAdd', () => {
     await clickTaskAddButton()
 
     expect(addTaskFunc).toHaveBeenCalledTimes(0)
-    expect(screen.getByText('タスク名が入力されていません---'))
+    expect(screen.getByText('タスク名が入力されていません'))
   })
 
   it('締切の日付を入力せず追加を押したら、エラーを表示する', async () => {
