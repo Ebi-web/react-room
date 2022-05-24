@@ -1,9 +1,7 @@
 interface Task {
-  taskId: string, // ulid
-  taskName: string,
+  taskId: string // ulid
+  taskName: string
   dueDate: string // YYYY-MM-DD
 }
 
-export {
-  Task
-}
+export { Task }

@@ -1,10 +1,8 @@
 {
-  "extends": [
-    "eslint:recommended",
-    "next"
-  ],
+  "extends": ["eslint:recommended", "next"],
   "rules": {
-    "no-var": "error"
+    "no-var": "error",
+    "no-unused-vars": "off"
   },
   "env": {
     "browser": true,
