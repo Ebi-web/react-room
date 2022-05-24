@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "license": "MIT",
   "scripts": {
-    "dev": "run-p dev:*",
-    "dev:next": "next dev",
+    "dev": "yarn install && run-p dev:*",
+    "dev:next": "yarn install && next dev",
     "dev:path": "pathpida --enableStatic --ignorePath .gitignore --output src/lib --watch",
     "build": "pathpida --enableStatic --ignorePath .gitignore --output src/lib && next build",
     "start": "next start",
