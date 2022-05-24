@@ -6,6 +6,7 @@ import { faTrashCan } from '@fortawesome/free-solid-svg-icons'
 
 interface TaskListProps {
   taskList: Task[]
+  deleteTask: (taskId: string) => void
 }
 
 const TaskList: FC<TaskListProps> = (props) => {
@@ -19,7 +20,12 @@ const TaskList: FC<TaskListProps> = (props) => {
           <div className="flex justify-between">
             <span className="text-xl font-semibold">{task.taskName}</span>
             <span className="hover:opacity-50">
-              <FontAwesomeIcon icon={faTrashCan} />
+              <FontAwesomeIcon
+                icon={faTrashCan}
+                onClick={() => {
+                  props.deleteTask(task.taskId)
+                }}
+              />
             </span>
           </div>
           <p className="font-light mt-2 text-xs">締め切り: {task.dueDate}</p>
