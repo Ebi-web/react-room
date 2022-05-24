@@ -1,5 +1,7 @@
 import { FC, useState } from 'react'
 import { ulid } from 'ulid'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faPlus } from '@fortawesome/free-solid-svg-icons'
 
 import type { Task } from '../types/Task'
 
@@ -60,7 +62,8 @@ const TaskAdd: FC<TaskAddProps> = (props) => {
           className="border-2 m-5 p-2 rounded-md shadow-md hover:shadow-none"
           onClick={addTaskLocal}
         >
-          追加
+          <span className="m-1">追加</span>
+          <FontAwesomeIcon icon={faPlus} />
         </button>
       </div>
       {errorText ? <div className="bg-red-200 m-1 p-1">{errorText}</div> : ''}
