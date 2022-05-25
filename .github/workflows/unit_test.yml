@@ -5,10 +5,7 @@ on:
       - 'main'
   pull_request:
     branches:
-      - 'hotfix/**'
-      - 'feature/**'
-      - 'release/**'
-    types: [opened, reopened, synchronize]
+      - 'main'
 jobs:
   test-run:
     runs-on: ubuntu-20.04
