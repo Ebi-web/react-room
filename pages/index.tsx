@@ -17,14 +17,22 @@ const Index: FC<void> = () => {
     setTaskList(loadedTaskList)
   }, [])
 
-  const addTask = (task: Task) => {
-    const newTaskList = [...taskList, task]
+  const setTaskListStateAndStorage = (newTaskList: Task[]) => {
     setTaskList(newTaskList)
     setTaskListToLocalStorage(newTaskList)
   }
+
+  const addTask = (task: Task) => {
+    const newTaskList = [...taskList, task]
+    setTaskListStateAndStorage(newTaskList)
+  }
   const clearTaskList = () => {
-    setTaskList([])
-    setTaskListToLocalStorage([])
+    const newTaskList = [] as Task[]
+    setTaskListStateAndStorage(newTaskList)
+  }
+  const deleteTask = (taskId: string) => {
+    const newTaskList = taskList.filter((task) => task.taskId !== taskId)
+    setTaskListStateAndStorage(newTaskList)
   }
 
   return (
@@ -39,7 +47,7 @@ const Index: FC<void> = () => {
       </div>
 
       <div className="ml-8">
-        <TaskList taskList={taskList} />
+        <TaskList taskList={taskList} deleteTask={deleteTask} />
       </div>
     </>
   )
