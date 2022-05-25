@@ -19,4 +19,4 @@ jobs:
 
       - name: run unit test
         run: |
-          docker-compose exec web yarn unit
+          docker-compose exec -T web yarn unit
