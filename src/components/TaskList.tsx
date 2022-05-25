@@ -11,6 +11,7 @@ const TaskList: FC<TaskListProps> = (props) => {
       {props.taskList.map((task) => (
         <div
           className="border w-1/2 flex-col flex break-words mb-3 p-3 rounded-xl shadow-md cursor-pointer	hover:shadow-inner"
+          data-testid={`task-${task.taskId}`}
           key={task.taskId}
         >
           <span className="text-xl font-semibold">{task.taskName}</span>

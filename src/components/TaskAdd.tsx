@@ -36,18 +36,20 @@ const TaskAdd: FC<TaskAddProps> = (props) => {
     <div className="border">
       <div className="flex">
         <div className="m-5">
-          <span>新しいタスク名：</span>
+          <label htmlFor="input-taskname">新しいタスク名：</label>
           <input
             type="text"
+            id="input-taskname"
             value={inputTaskName}
             className=" w-52 rounded-md"
             onChange={(event) => setInputTaskName(event.target.value)}
           />
         </div>
         <div className="m-5">
-          <span>締め切り：</span>
+          <label htmlFor="input-duedate">締め切り：</label>
           <input
             type="date"
+            id="input-duedate"
             value={inputDate}
             className="rounded-md"
             onChange={(event) => {
