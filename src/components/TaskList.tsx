@@ -1,5 +1,6 @@
 import { FC } from 'react'
 import type { Task } from '../types/Task'
+import TaskEdit from './TaskEdit'
 
 interface TaskListProps {
   taskList: Task[]
@@ -15,6 +16,7 @@ const TaskList: FC<TaskListProps> = (props) => {
         >
           <span className="text-xl font-semibold">{task.taskName}</span>
           <p className="font-light mt-2 text-xs">締め切り: {task.dueDate}</p>
+          <TaskEdit taskId={task.taskId} taskName={task.taskName} dueDate={task.dueDate}></TaskEdit>
         </div>
       ))}
     </ul>
