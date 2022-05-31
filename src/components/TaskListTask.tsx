@@ -19,6 +19,14 @@ interface TaskListTaskProps {
 const TaskListTask: FC<TaskListTaskProps> = (props) => {
   const [isOpenChildTaskList, setIsOpenChildTaskList] = useState(false)
 
+  const existChildTask = () => {
+    return props.taskList.findIndex(
+      (task) => task.parentTaskId === props.task.taskId
+    ) >= 0
+      ? true
+      : false
+  }
+
   return (
     <div>
       <div
@@ -49,7 +57,11 @@ const TaskListTask: FC<TaskListTaskProps> = (props) => {
               <FontAwesomeIcon
                 icon={faTrashCan}
                 onClick={() => {
-                  props.deleteTask(props.task.taskId)
+                  if (existChildTask()) {
+                    console.error('小タスクが存在します')
+                  } else {
+                    props.deleteTask(props.task.taskId)
+                  }
                 }}
               />
             </span>
