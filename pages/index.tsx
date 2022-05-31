@@ -18,6 +18,7 @@ const Index: FC<void> = () => {
   }, [])
 
   const setTaskListStateAndStorage = (newTaskList: Task[]) => {
+    console.warn(newTaskList)
     setTaskList(newTaskList)
     setTaskListToLocalStorage(newTaskList)
   }
@@ -47,7 +48,11 @@ const Index: FC<void> = () => {
       </div>
 
       <div className="ml-8">
-        <TaskList taskList={taskList} deleteTask={deleteTask} />
+        <TaskList
+          taskList={taskList}
+          parentTaskId={null}
+          deleteTask={deleteTask}
+        />
       </div>
     </>
   )

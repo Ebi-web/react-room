@@ -1,37 +1,26 @@
 import { FC } from 'react'
-import type { Task } from '../types/Task'
-
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faTrashCan } from '@fortawesome/free-solid-svg-icons'
+import type { ParentTaskId, Task, DeleteTask } from '../types/Task'
+import TaskListTask from './TaskListTask'
 
 interface TaskListProps {
   taskList: Task[]
-  deleteTask: (taskId: string) => void
+  parentTaskId: ParentTaskId
+  deleteTask: DeleteTask
 }
 
 const TaskList: FC<TaskListProps> = (props) => {
   return (
     <ul>
-      {props.taskList.map((task) => (
-        <div
-          className="border w-1/2 flex-col flex break-words mb-3 p-3 rounded-xl shadow-md cursor-pointer	hover:shadow-inner"
-          data-testid={`task-${task.taskId}`}
-          key={task.taskId}
-        >
-          <div className="flex justify-between">
-            <span className="text-xl font-semibold">{task.taskName}</span>
-            <span className="hover:opacity-50">
-              <FontAwesomeIcon
-                icon={faTrashCan}
-                onClick={() => {
-                  props.deleteTask(task.taskId)
-                }}
-              />
-            </span>
-          </div>
-          <p className="font-light mt-2 text-xs">締め切り: {task.dueDate}</p>
-        </div>
-      ))}
+      {props.taskList
+        .filter((task) => task.parentTaskId === props.parentTaskId)
+        .map((task) => (
+          <TaskListTask
+            key={task.taskId}
+            task={task}
+            taskList={props.taskList}
+            deleteTask={props.deleteTask}
+          />
+        ))}
     </ul>
   )
 }

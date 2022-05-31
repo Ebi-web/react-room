@@ -13,6 +13,7 @@ const TaskAdd: FC<TaskAddProps> = (props) => {
   const [inputTaskName, setInputTaskName] = useState('')
   const [inputDate, setInputDate] = useState('')
   const [errorText, setErrorText] = useState('')
+  const [inputParentTaskId, setInputParentTaskId] = useState('')
 
   const addTaskLocal = () => {
     if (inputTaskName === '') {
@@ -25,6 +26,7 @@ const TaskAdd: FC<TaskAddProps> = (props) => {
     }
     const newTask: Task = {
       taskId: ulid(),
+      parentTaskId: inputParentTaskId ? inputParentTaskId : null,
       taskName: inputTaskName,
       dueDate: inputDate,
     }
@@ -36,6 +38,14 @@ const TaskAdd: FC<TaskAddProps> = (props) => {
 
   return (
     <div className="border">
+      <div>
+        <span className="text-red-500">**開発用表示** 親タスクID:</span>
+        <input
+          type="text"
+          className="w-80"
+          onChange={(event) => setInputParentTaskId(event.target.value)}
+        />
+      </div>
       <div className="flex">
         <div className="m-5">
           <label htmlFor="input-taskname">新しいタスク名：</label>
