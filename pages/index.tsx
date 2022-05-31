@@ -1,7 +1,7 @@
-import { useState, useEffect, FC } from 'react'
+import { useEffect, FC, useState } from 'react'
 import type { Task } from '../src/types/Task'
 import {
-  getTaskListFromLocalStorage,
+  getAllTaskListFromLocalStorage,
   setTaskListToLocalStorage,
 } from '../src/functions/localStorage'
 import Header from '../src/components/Header'
@@ -13,7 +13,7 @@ const Index: FC<void> = () => {
   const [taskList, setTaskList] = useState<Task[]>([])
 
   useEffect(() => {
-    const loadedTaskList = getTaskListFromLocalStorage()
+    const loadedTaskList = getAllTaskListFromLocalStorage()
     setTaskList(loadedTaskList)
   }, [])
 
@@ -33,13 +33,12 @@ const Index: FC<void> = () => {
       <div>
         <TaskAdd addTask={addTask} />
       </div>
-
       <div>
         <TaskClear clearTaskList={clearTaskList} />
       </div>
 
       <div className="ml-8">
-        <TaskList taskList={taskList} />
+        <TaskList taskList={taskList} setTaskList={setTaskList}/>
       </div>
     </>
   )

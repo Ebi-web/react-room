@@ -4,6 +4,7 @@ import TaskEdit from './TaskEdit'
 
 interface TaskListProps {
   taskList: Task[]
+  setTaskList: (taskList: Task[]) => void
 }
 
 const TaskList: FC<TaskListProps> = (props) => {
@@ -16,7 +17,7 @@ const TaskList: FC<TaskListProps> = (props) => {
         >
           <span className="text-xl font-semibold">{task.taskName}</span>
           <p className="font-light mt-2 text-xs">締め切り: {task.dueDate}</p>
-          <TaskEdit taskId={task.taskId} taskName={task.taskName} dueDate={task.dueDate}></TaskEdit>
+          <TaskEdit task={task} setTaskList={props.setTaskList}></TaskEdit>
         </div>
       ))}
     </ul>

@@ -1,17 +1,23 @@
 import { FC, useState } from 'react'
 import type { Task } from '../types/Task'
-import { validateTask } from '../types/Task'
-import { Button, Label, Modal, TextInput } from 'flowbite-react'
+import { validateTask,updateTask } from '../types/Task'
+import { Alert, Button, Label, Modal, TextInput } from 'flowbite-react'
 
-const EditTaskButton: FC<Task> = (props) => {
-  const [inputTaskName, setInputTaskName] = useState(props.taskName)
-  const [inputDueDate, setInputDueDate] = useState(props.dueDate)
+interface TaskEditProps {
+  task:Task
+  setTaskList: (taskList: Task[]) => void
+}
+
+const EditTaskButton: FC<TaskEditProps> = (props) => {
+  const [inputTaskName, setInputTaskName] = useState(props.task.taskName)
+  const [inputDueDate, setInputDueDate] = useState(props.task.dueDate)
   const [errMessage, setErrMessage] = useState('')
   const [isModalOpen, setIsModalOpen] = useState(false)
 
   const updateTaskLocal = () => {
+    //validation
     const updatedTask: Task = {
-      taskId: props.taskId,
+      taskId: props.task.taskId,
       taskName: inputTaskName,
       dueDate: inputDueDate,
     }
@@ -20,8 +26,18 @@ const EditTaskButton: FC<Task> = (props) => {
       setErrMessage(msg)
       return
     }
-    // props.updateTask(updatedTask)
+
+    //execute update
+    try {
+      updateTask(updatedTask,props.setTaskList)
+    } catch (err) {
+      setErrMessage('タスクの編集に失敗しました')
+      return
+    }
+
+    //clean up
     setErrMessage('')
+    setIsModalOpen(false)
   }
 
   return (
@@ -63,7 +79,19 @@ const EditTaskButton: FC<Task> = (props) => {
               required={true}
             />
           </div>
-          <Button className="w-full">編集確定</Button>
+          <Button className="w-full" onClick={() => updateTaskLocal()}>
+            編集確定
+          </Button>
+          {errMessage ? (
+            <Alert color="red">
+              <span>
+                <span className="font-medium">編集に失敗しました</span>
+                {' '}{errMessage}
+              </span>
+            </Alert>
+          ) : (
+            ''
+          )}
         </Modal.Body>
       </Modal>
     </>
