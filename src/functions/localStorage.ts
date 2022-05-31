@@ -14,12 +14,12 @@ const setTaskListToLocalStorage = (taskList: Task[]) => {
 }
 const getTaskFromLocalStorage = (taskId: string): Task | null => {
   const taskList = getAllTaskListFromLocalStorage()
-  const task = taskList.find(task => task.taskId === taskId)
+  const task = taskList.find((task) => task.taskId === taskId)
   return task || null
 }
 const updateTaskInLocalStorage = (givenTask: Task): void => {
   const taskList = getAllTaskListFromLocalStorage()
-  const index = taskList.findIndex(task => task.taskId === givenTask.taskId)
+  const index = taskList.findIndex((task) => task.taskId === givenTask.taskId)
   if (index === -1) {
     throw new Error('タスクが見つかりません')
   }
@@ -27,4 +27,9 @@ const updateTaskInLocalStorage = (givenTask: Task): void => {
   setTaskListToLocalStorage(taskList)
 }
 
-export { getAllTaskListFromLocalStorage, setTaskListToLocalStorage,getTaskFromLocalStorage, updateTaskInLocalStorage }
+export {
+  getAllTaskListFromLocalStorage,
+  setTaskListToLocalStorage,
+  getTaskFromLocalStorage,
+  updateTaskInLocalStorage,
+}

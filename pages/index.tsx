@@ -38,7 +38,7 @@ const Index: FC<void> = () => {
       </div>
 
       <div className="ml-8">
-        <TaskList taskList={taskList} setTaskList={setTaskList}/>
+        <TaskList taskList={taskList} setTaskList={setTaskList} />
       </div>
     </>
   )

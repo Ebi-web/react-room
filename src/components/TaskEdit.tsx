@@ -1,10 +1,10 @@
 import { FC, useState } from 'react'
 import type { Task } from '../types/Task'
-import { validateTask,updateTask } from '../types/Task'
+import { validateTask, updateTask } from '../types/Task'
 import { Alert, Button, Label, Modal, TextInput } from 'flowbite-react'
 
 interface TaskEditProps {
-  task:Task
+  task: Task
   setTaskList: (taskList: Task[]) => void
 }
 
@@ -29,7 +29,7 @@ const EditTaskButton: FC<TaskEditProps> = (props) => {
 
     //execute update
     try {
-      updateTask(updatedTask,props.setTaskList)
+      updateTask(updatedTask, props.setTaskList)
     } catch (err) {
       setErrMessage('タスクの編集に失敗しました')
       return
@@ -85,8 +85,8 @@ const EditTaskButton: FC<TaskEditProps> = (props) => {
           {errMessage ? (
             <Alert color="red">
               <span>
-                <span className="font-medium">編集に失敗しました</span>
-                {' '}{errMessage}
+                <span className="font-medium">編集に失敗しました</span>{' '}
+                {errMessage}
               </span>
             </Alert>
           ) : (
