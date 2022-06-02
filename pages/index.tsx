@@ -51,6 +51,7 @@ const Index: FC<void> = () => {
         <TaskList
           taskList={taskList}
           parentTaskId={null}
+          depth={0}
           deleteTask={deleteTask}
         />
       </div>
