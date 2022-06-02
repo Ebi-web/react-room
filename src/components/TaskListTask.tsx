@@ -11,6 +11,7 @@ import type { Task, DeleteTask } from '../types/Task'
 import TaskList from './TaskList'
 
 interface TaskListTaskProps {
+  depth: Number
   task: Task
   taskList: Task[]
   deleteTask: DeleteTask
@@ -76,6 +77,7 @@ const TaskListTask: FC<TaskListTaskProps> = (props) => {
           taskList={props.taskList}
           deleteTask={props.deleteTask}
           parentTaskId={props.task.taskId}
+          depth={Number(props.depth) + 1}
         />
       ) : (
         ''
