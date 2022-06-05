@@ -1,13 +1,13 @@
 // null (最上位親タスクの時) | ulid (それ以外)
-type ParentTaskId = string | null
+type ParentTaskIdType = string | null
 
 interface Task {
   taskId: string // ulid
-  parentTaskId: ParentTaskId
+  parentTaskId: ParentTaskIdType
   taskName: string
   dueDate: string // YYYY-MM-DD
 }
 
 type DeleteTask = (taskId: string) => void
 
-export { ParentTaskId, Task, DeleteTask }
+export { ParentTaskIdType, Task, DeleteTask }
