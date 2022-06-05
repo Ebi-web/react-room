@@ -5,17 +5,17 @@ import { faPlus } from '@fortawesome/free-solid-svg-icons'
 
 import type { Task } from '../types/Task'
 import { TaskAddParentIdContext } from '../hooks/TaskAddHooks'
+import { TaskListContext } from '../hooks/TaskListHooks'
 import { validateTask } from '../functions/Task'
 
-interface TaskAddProps {
-  addTask: (task: Task) => void
-}
-
-const TaskAdd: FC<TaskAddProps> = (props) => {
+const TaskAdd: FC<{}> = () => {
+  // local
   const [inputTaskName, setInputTaskName] = useState('')
   const [inputDate, setInputDate] = useState('')
   const [errorText, setErrorText] = useState('')
+  // global
   const { taskAddParentId } = useContext(TaskAddParentIdContext)
+  const { taskListDispatch } = useContext(TaskListContext)
 
   const addTaskLocal = () => {
     const newTask: Task = {
@@ -29,7 +29,10 @@ const TaskAdd: FC<TaskAddProps> = (props) => {
       setErrorText(err_msg)
       return
     }
-    props.addTask(newTask)
+    taskListDispatch({
+      command: 'ADD_TASK',
+      value: newTask,
+    })
     // reset
     setErrorText('')
     setInputTaskName('')
