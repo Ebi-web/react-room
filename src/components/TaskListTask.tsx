@@ -1,4 +1,4 @@
-import { FC, useState, useEffect } from 'react'
+import { FC, useState, useContext } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
   faAngleRight,
@@ -8,6 +8,7 @@ import {
 } from '@fortawesome/free-solid-svg-icons'
 
 import type { Task, DeleteTask } from '../types/Task'
+import { TaskAddParentIdContext } from '../hooks/TaskAddHooks'
 import TaskList from './TaskList'
 
 interface TaskListTaskProps {
@@ -19,6 +20,7 @@ interface TaskListTaskProps {
 
 const TaskListTask: FC<TaskListTaskProps> = (props) => {
   const [isOpenChildTaskList, setIsOpenChildTaskList] = useState(false)
+  const { setTaskAddParentId } = useContext(TaskAddParentIdContext)
 
   const existChildTask = () => {
     return props.taskList.findIndex(
@@ -50,7 +52,7 @@ const TaskListTask: FC<TaskListTaskProps> = (props) => {
               <FontAwesomeIcon
                 icon={faPlus}
                 onClick={() => {
-                  console.log(`click plus ${props.task.taskId}`)
+                  setTaskAddParentId(props.task.taskId)
                 }}
               />
             </span>

@@ -1,5 +1,5 @@
 import { useState, useEffect, FC } from 'react'
-import type { Task } from '../src/types/Task'
+import type { Task, ParentTaskIdType } from '../src/types/Task'
 import {
   getTaskListFromLocalStorage,
   setTaskListToLocalStorage,
@@ -9,7 +9,10 @@ import TaskAdd from '../src/components/TaskAdd'
 import TaskClear from '../src/components/TaskClear'
 import TaskList from '../src/components/TaskList'
 
+import { TaskAddParentIdContext } from '../src/hooks/TaskAddHooks'
+
 const Index: FC<void> = () => {
+  const [taskAddParentId, setTaskAddParentId] = useState<ParentTaskIdType>(null)
   const [taskList, setTaskList] = useState<Task[]>([])
 
   useEffect(() => {
@@ -39,8 +42,13 @@ const Index: FC<void> = () => {
   return (
     <>
       <Header />
+
       <div>
-        <TaskAdd addTask={addTask} />
+        <TaskAddParentIdContext.Provider
+          value={{ taskAddParentId, setTaskAddParentId }}
+        >
+          <TaskAdd addTask={addTask} />
+        </TaskAddParentIdContext.Provider>
       </div>
 
       <div>
@@ -48,12 +56,16 @@ const Index: FC<void> = () => {
       </div>
 
       <div className="ml-8">
-        <TaskList
-          taskList={taskList}
-          parentTaskId={null}
-          depth={0}
-          deleteTask={deleteTask}
-        />
+        <TaskAddParentIdContext.Provider
+          value={{ taskAddParentId, setTaskAddParentId }}
+        >
+          <TaskList
+            taskList={taskList}
+            parentTaskId={null}
+            depth={0}
+            deleteTask={deleteTask}
+          />
+        </TaskAddParentIdContext.Provider>
       </div>
     </>
   )
