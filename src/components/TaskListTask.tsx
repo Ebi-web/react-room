@@ -7,20 +7,21 @@ import {
   faTrashCan,
 } from '@fortawesome/free-solid-svg-icons'
 
-import type { Task, DeleteTask } from '../types/Task'
+import type { Task } from '../types/Task'
 import { TaskAddParentIdContext } from '../hooks/TaskAddHooks'
+import { TaskListContext } from '../hooks/TaskListHooks'
 import TaskList from './TaskList'
 
 interface TaskListTaskProps {
   depth: Number
   task: Task
   taskList: Task[]
-  deleteTask: DeleteTask
 }
 
 const TaskListTask: FC<TaskListTaskProps> = (props) => {
   const [isOpenChildTaskList, setIsOpenChildTaskList] = useState(false)
   const { setTaskAddParentId } = useContext(TaskAddParentIdContext)
+  const { taskListDispatch } = useContext(TaskListContext)
 
   const existChildTask = () => {
     return props.taskList.findIndex(
@@ -61,9 +62,13 @@ const TaskListTask: FC<TaskListTaskProps> = (props) => {
                 icon={faTrashCan}
                 onClick={() => {
                   if (existChildTask()) {
+                    // TODO:ユーザーへの通知実装
                     console.error('小タスクが存在します')
                   } else {
-                    props.deleteTask(props.task.taskId)
+                    taskListDispatch({
+                      command: 'DELETE_TASK',
+                      value: props.task.taskId,
+                    })
                   }
                 }}
               />
@@ -77,7 +82,6 @@ const TaskListTask: FC<TaskListTaskProps> = (props) => {
       {isOpenChildTaskList ? (
         <TaskList
           taskList={props.taskList}
-          deleteTask={props.deleteTask}
           parentTaskId={props.task.taskId}
           depth={Number(props.depth) + 1}
         />

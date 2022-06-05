@@ -1,12 +1,11 @@
 import { FC } from 'react'
-import type { ParentTaskId, Task, DeleteTask } from '../types/Task'
+import type { ParentTaskIdType, Task } from '../types/Task'
 import TaskListTask from './TaskListTask'
 
 interface TaskListProps {
   taskList: Task[]
-  parentTaskId: ParentTaskId
+  parentTaskId: ParentTaskIdType
   depth: Number
-  deleteTask: DeleteTask
 }
 
 const TaskList: FC<TaskListProps> = (props) => {
@@ -20,7 +19,6 @@ const TaskList: FC<TaskListProps> = (props) => {
             depth={props.depth}
             task={task}
             taskList={props.taskList}
-            deleteTask={props.deleteTask}
           />
         ))}
     </ul>
