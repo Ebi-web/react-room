@@ -4,7 +4,8 @@ WORKDIR /src
 COPY ./ /src
 RUN yarn install && \
     yarn upgrade && \
-    yarn cache clean
+    yarn cache clean && \
+    apk --update --no-cache add git bash
 
 EXPOSE 3000
 ENV CI=true

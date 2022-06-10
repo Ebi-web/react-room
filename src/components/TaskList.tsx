@@ -6,8 +6,7 @@ import { faTrashCan } from '@fortawesome/free-solid-svg-icons'
 
 interface TaskListProps {
   taskList: Task[]
-  deleteTask: (taskId: string) => void
-}
+  deleteTask: (taskId: string) => void}
 
 const TaskList: FC<TaskListProps> = (props) => {
   return (
