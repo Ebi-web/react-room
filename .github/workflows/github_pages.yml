@@ -17,6 +17,10 @@ jobs:
       - name: docker-compose up
         run: |
           docker-compose up -d
+      
+      - name: yarn install
+        run: |
+          docker-compose exec -T web yarn isntall
 
       - name: build nextjs
         run: |
