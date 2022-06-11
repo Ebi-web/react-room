@@ -1,4 +1,5 @@
-import { FC, useState, useContext } from 'react'
+import { FC, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
   faAngleRight,
@@ -6,25 +7,24 @@ import {
   faPlus,
   faTrashCan,
 } from '@fortawesome/free-solid-svg-icons'
-
+import { RootState } from '../stores/store'
+import { deleteTask } from '../stores/TaskListSlice'
+import { setParentTaskId } from '../stores/TaskAddSlice'
 import type { Task } from '../types/Task'
-import { TaskAddParentIdContext } from '../hooks/TaskAddHooks'
-import { TaskListContext } from '../hooks/TaskListHooks'
 import TaskList from './TaskList'
 
 interface TaskListTaskProps {
   depth: Number
   task: Task
-  taskList: Task[]
 }
 
 const TaskListTask: FC<TaskListTaskProps> = (props) => {
   const [isOpenChildTaskList, setIsOpenChildTaskList] = useState(false)
-  const { setTaskAddParentId } = useContext(TaskAddParentIdContext)
-  const { taskListDispatch } = useContext(TaskListContext)
+  const taskListSelector = useSelector((state: RootState) => state.taskList)
+  const dispatch = useDispatch()
 
   const existChildTask = () => {
-    return props.taskList.findIndex(
+    return taskListSelector.taskList.findIndex(
       (task) => task.parentTaskId === props.task.taskId
     ) >= 0
       ? true
@@ -53,7 +53,7 @@ const TaskListTask: FC<TaskListTaskProps> = (props) => {
               <FontAwesomeIcon
                 icon={faPlus}
                 onClick={() => {
-                  setTaskAddParentId(props.task.taskId)
+                  dispatch(setParentTaskId(props.task.taskId))
                 }}
               />
             </span>
@@ -65,10 +65,7 @@ const TaskListTask: FC<TaskListTaskProps> = (props) => {
                     // TODO:ユーザーへの通知実装
                     console.error('小タスクが存在します')
                   } else {
-                    taskListDispatch({
-                      command: 'DELETE_TASK',
-                      value: props.task.taskId,
-                    })
+                    dispatch(deleteTask(props.task.taskId))
                   }
                 }}
               />
@@ -81,7 +78,6 @@ const TaskListTask: FC<TaskListTaskProps> = (props) => {
       </div>
       {isOpenChildTaskList ? (
         <TaskList
-          taskList={props.taskList}
           parentTaskId={props.task.taskId}
           depth={Number(props.depth) + 1}
         />
