@@ -1,56 +1,45 @@
-import { useState, useEffect, FC, useReducer } from 'react'
-import type { Task, ParentTaskIdType } from '../src/types/Task'
+import { useEffect, FC } from 'react'
+import { useDispatch } from 'react-redux'
+import { setTaskList } from '../src/stores/TaskListSlice'
+import { setParentTaskId } from '../src/stores/TaskAddSlice'
 import { getTaskListFromLocalStorage } from '../src/functions/localStorage'
 import Header from '../src/components/Header'
 import TaskAdd from '../src/components/TaskAdd'
 import TaskClear from '../src/components/TaskClear'
 import TaskList from '../src/components/TaskList'
 
-import { TaskAddParentIdContext } from '../src/hooks/TaskAddHooks'
-import { TaskListContext, TaskListReducer } from '../src/hooks/TaskListHooks'
-
-const initialTaskList = [] as Task[]
-
 const Index: FC<void> = () => {
-  const [taskAddParentId, setTaskAddParentId] = useState<ParentTaskIdType>(null)
-  const [taskListState, taskListDispatch] = useReducer(
-    TaskListReducer,
-    initialTaskList
-  )
+  const dispatch = useDispatch()
 
   useEffect(() => {
     const loadedTaskList = getTaskListFromLocalStorage()
-    taskListDispatch({
-      command: 'SET_TASKLIST',
-      value: loadedTaskList,
-    })
+    dispatch(setTaskList(loadedTaskList))
   }, [])
 
   return (
     <>
       <Header />
 
-      <TaskListContext.Provider value={{ taskListState, taskListDispatch }}>
-        <div>
-          <TaskAddParentIdContext.Provider
-            value={{ taskAddParentId, setTaskAddParentId }}
-          >
-            <TaskAdd />
-          </TaskAddParentIdContext.Provider>
-        </div>
+      <div>
+        <TaskAdd />
+      </div>
+
+      <div className="flex">
+        <button
+          className="border-2 m-5 p-2 hover:opacity-50"
+          onClick={() => dispatch(setParentTaskId(null))}
+        >
+          タスク追加の開発用：親タスクIDのリセット
+        </button>
 
         <div>
           <TaskClear />
         </div>
+      </div>
 
-        <div className="ml-8">
-          <TaskAddParentIdContext.Provider
-            value={{ taskAddParentId, setTaskAddParentId }}
-          >
-            <TaskList taskList={taskListState} parentTaskId={null} depth={0} />
-          </TaskAddParentIdContext.Provider>
-        </div>
-      </TaskListContext.Provider>
+      <div className="ml-8">
+        <TaskList parentTaskId={null} depth={0} />
+      </div>
     </>
   )
 }

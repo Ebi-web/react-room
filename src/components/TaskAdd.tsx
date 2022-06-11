@@ -1,12 +1,13 @@
-import { FC, useState, useContext } from 'react'
+import { FC, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import { ulid } from 'ulid'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPlus } from '@fortawesome/free-solid-svg-icons'
 
 import type { Task } from '../types/Task'
-import { TaskAddParentIdContext } from '../hooks/TaskAddHooks'
-import { TaskListContext } from '../hooks/TaskListHooks'
 import { validateTask } from '../functions/Task'
+import { addTask } from '../stores/TaskListSlice'
+import { RootState } from '../stores/store'
 
 const TaskAdd: FC<{}> = () => {
   // local
@@ -14,13 +15,15 @@ const TaskAdd: FC<{}> = () => {
   const [inputDate, setInputDate] = useState('')
   const [errorText, setErrorText] = useState('')
   // global
-  const { taskAddParentId } = useContext(TaskAddParentIdContext)
-  const { taskListDispatch } = useContext(TaskListContext)
+  const parentTaskIdSelector = useSelector(
+    (state: RootState) => state.parentTaskId
+  )
+  const dispatch = useDispatch()
 
   const addTaskLocal = () => {
     const newTask: Task = {
       taskId: ulid(),
-      parentTaskId: taskAddParentId,
+      parentTaskId: parentTaskIdSelector.parentTaskId,
       taskName: inputTaskName,
       dueDate: inputDate,
     }
@@ -29,11 +32,8 @@ const TaskAdd: FC<{}> = () => {
       setErrorText(err_msg)
       return
     }
-    taskListDispatch({
-      command: 'ADD_TASK',
-      value: newTask,
-    })
-    // reset
+
+    dispatch(addTask(newTask))
     setErrorText('')
     setInputTaskName('')
   }
@@ -42,7 +42,7 @@ const TaskAdd: FC<{}> = () => {
     <div className="border">
       <div>
         <span className="text-red-500">
-          **開発用表示** 親タスクID: {taskAddParentId}
+          **開発用表示** 親タスクID: {parentTaskIdSelector.parentTaskId}
         </span>
       </div>
       <div className="flex">
