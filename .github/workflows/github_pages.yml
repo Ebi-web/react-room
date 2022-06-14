@@ -17,7 +17,7 @@ jobs:
       - name: docker-compose up
         run: |
           docker-compose up -d
-      
+
       - name: yarn install
         run: |
           docker-compose exec -T web yarn install
@@ -29,10 +29,6 @@ jobs:
       - name: export nextjs
         run: |
           docker-compose exec -T web yarn next export
-    
-      # https://qiita.com/manten120/items/87e9e822800403904dc8
-      - name: add nojekyll
-        run: touch ./out/.nojekyll
 
       - name: deploy
         uses: peaceiris/actions-gh-pages@v3
