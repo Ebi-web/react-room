@@ -1,41 +1,50 @@
 import { FC, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import { ulid } from 'ulid'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPlus } from '@fortawesome/free-solid-svg-icons'
 
 import type { Task } from '../types/Task'
+import { validateTask } from '../functions/Task'
+import { addTask } from '../stores/TaskListSlice'
+import { RootState } from '../stores/store'
 
-interface TaskAddProps {
-  addTask: (task: Task) => void
-}
-
-const TaskAdd: FC<TaskAddProps> = (props) => {
+const TaskAdd: FC<{}> = () => {
+  // local
   const [inputTaskName, setInputTaskName] = useState('')
   const [inputDate, setInputDate] = useState('')
   const [errorText, setErrorText] = useState('')
+  // global
+  const parentTaskIdSelector = useSelector(
+    (state: RootState) => state.parentTaskId
+  )
+  const dispatch = useDispatch()
 
   const addTaskLocal = () => {
-    if (inputTaskName === '') {
-      setErrorText('タスク名が入力されていません')
-      return
-    }
-    if (inputDate === '') {
-      setErrorText('タスク締切が入力されていません')
-      return
-    }
     const newTask: Task = {
       taskId: ulid(),
+      parentTaskId: parentTaskIdSelector.parentTaskId,
       taskName: inputTaskName,
       dueDate: inputDate,
     }
-    props.addTask(newTask)
-    // reset
+    const err_msg = validateTask(newTask)
+    if (err_msg) {
+      setErrorText(err_msg)
+      return
+    }
+
+    dispatch(addTask(newTask))
     setErrorText('')
     setInputTaskName('')
   }
 
   return (
     <div className="border">
+      <div>
+        <span className="text-red-500">
+          **開発用表示** 親タスクID: {parentTaskIdSelector.parentTaskId}
+        </span>
+      </div>
       <div className="flex">
         <div className="m-5">
           <label htmlFor="input-taskname">新しいタスク名：</label>

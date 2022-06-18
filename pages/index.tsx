@@ -1,53 +1,44 @@
-import { useState, useEffect, FC } from 'react'
-import type { Task } from '../src/types/Task'
-import {
-  getTaskListFromLocalStorage,
-  setTaskListToLocalStorage,
-} from '../src/functions/localStorage'
+import { useEffect, FC } from 'react'
+import { useDispatch } from 'react-redux'
+import { setTaskList } from '../src/stores/TaskListSlice'
+import { setParentTaskId } from '../src/stores/TaskAddSlice'
+import { getTaskListFromLocalStorage } from '../src/functions/localStorage'
 import Header from '../src/components/Header'
 import TaskAdd from '../src/components/TaskAdd'
 import TaskClear from '../src/components/TaskClear'
 import TaskList from '../src/components/TaskList'
 
 const Index: FC<void> = () => {
-  const [taskList, setTaskList] = useState<Task[]>([])
+  const dispatch = useDispatch()
 
   useEffect(() => {
     const loadedTaskList = getTaskListFromLocalStorage()
-    setTaskList(loadedTaskList)
+    dispatch(setTaskList(loadedTaskList))
   }, [])
-
-  const setTaskListStateAndStorage = (newTaskList: Task[]) => {
-    setTaskList(newTaskList)
-    setTaskListToLocalStorage(newTaskList)
-  }
-
-  const addTask = (task: Task) => {
-    const newTaskList = [...taskList, task]
-    setTaskListStateAndStorage(newTaskList)
-  }
-  const clearTaskList = () => {
-    const newTaskList = [] as Task[]
-    setTaskListStateAndStorage(newTaskList)
-  }
-  const deleteTask = (taskId: string) => {
-    const newTaskList = taskList.filter((task) => task.taskId !== taskId)
-    setTaskListStateAndStorage(newTaskList)
-  }
 
   return (
     <>
       <Header />
-      <div>
-        <TaskAdd addTask={addTask} />
-      </div>
 
       <div>
-        <TaskClear clearTaskList={clearTaskList} />
+        <TaskAdd />
+      </div>
+
+      <div className="flex">
+        <button
+          className="border-2 m-5 p-2 hover:opacity-50"
+          onClick={() => dispatch(setParentTaskId(null))}
+        >
+          タスク追加の開発用：親タスクIDのリセット
+        </button>
+
+        <div>
+          <TaskClear />
+        </div>
       </div>
 
       <div className="ml-8">
-        <TaskList taskList={taskList} deleteTask={deleteTask} />
+        <TaskList parentTaskId={null} depth={0} />
       </div>
     </>
   )
