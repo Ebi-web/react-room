@@ -8,7 +8,7 @@ import {
   faTrashCan,
 } from '@fortawesome/free-solid-svg-icons'
 import { RootState } from '../stores/store'
-import { deleteTask } from '../stores/TaskListSlice'
+import { deleteTask, setTaskList } from '../stores/TaskListSlice'
 import { setParentTaskId } from '../stores/TaskAddSlice'
 import type { Task } from '../types/Task'
 import TaskList from './TaskList'
@@ -25,7 +25,10 @@ const TaskListTask: FC<TaskListTaskProps> = (props) => {
 
   const taskCount = taskListSelector.taskList.filter(
     (task) => props.task.taskId === task.parentTaskId
-  ).length
+  )
+  const taskDoneCount = taskCount
+    .map((task) => task.status === true)
+    .filter((status) => status === true).length
 
   const existChildTask = () => {
     return taskListSelector.taskList.findIndex(
@@ -33,6 +36,19 @@ const TaskListTask: FC<TaskListTaskProps> = (props) => {
     ) >= 0
       ? true
       : false
+  }
+
+  const handleOnStatus = (taskId: string, status: boolean) => {
+    const deepCopy = taskListSelector.taskList.map((todo) => ({ ...todo }))
+
+    const newTodos = deepCopy.map((todo) => {
+      if (todo.taskId === taskId) {
+        todo.status = !status
+      }
+      return todo
+    })
+
+    dispatch(setTaskList(newTodos))
   }
 
   return (
@@ -51,7 +67,15 @@ const TaskListTask: FC<TaskListTaskProps> = (props) => {
               }}
             />
           </span>
-          <p>0 / {taskCount}</p>
+          <p>
+            {taskDoneCount}/{taskCount.length}
+          </p>
+          {/* メモ：checkedでwarningでwarningが出てしまう */}
+          <input
+            type="checkbox"
+            checked={props.task.status}
+            onClick={() => handleOnStatus(props.task.taskId, props.task.status)}
+          />
         </div>
         <div className="flex justify-between">
           <span className="text-xl font-semibold">{props.task.taskName}</span>

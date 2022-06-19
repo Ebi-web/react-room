@@ -26,6 +26,7 @@ const TaskAdd: FC<{}> = () => {
       parentTaskId: parentTaskIdSelector.parentTaskId,
       taskName: inputTaskName,
       dueDate: inputDate,
+      status: false,
     }
     const err_msg = validateTask(newTask)
     if (err_msg) {
