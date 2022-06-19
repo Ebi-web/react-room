@@ -23,6 +23,10 @@ const TaskListTask: FC<TaskListTaskProps> = (props) => {
   const taskListSelector = useSelector((state: RootState) => state.taskList)
   const dispatch = useDispatch()
 
+  const taskCount = taskListSelector.taskList.filter(
+    (task) => props.task.taskId === task.parentTaskId
+  ).length
+
   const existChildTask = () => {
     return taskListSelector.taskList.findIndex(
       (task) => task.parentTaskId === props.task.taskId
@@ -38,14 +42,17 @@ const TaskListTask: FC<TaskListTaskProps> = (props) => {
         data-testid={`task-${props.task.taskId}`}
         key={props.task.taskId}
       >
-        <span className="m-1 select-none hover:opacity-50">
-          <FontAwesomeIcon
-            icon={isOpenChildTaskList ? faAngleDown : faAngleRight}
-            onClick={() => {
-              setIsOpenChildTaskList(!isOpenChildTaskList)
-            }}
-          />
-        </span>
+        <div className="flex gap-6">
+          <span className="m-1 select-none hover:opacity-50">
+            <FontAwesomeIcon
+              icon={isOpenChildTaskList ? faAngleDown : faAngleRight}
+              onClick={() => {
+                setIsOpenChildTaskList(!isOpenChildTaskList)
+              }}
+            />
+          </span>
+          <p>0 / {taskCount}</p>
+        </div>
         <div className="flex justify-between">
           <span className="text-xl font-semibold">{props.task.taskName}</span>
           <div>
@@ -64,6 +71,7 @@ const TaskListTask: FC<TaskListTaskProps> = (props) => {
                   if (existChildTask()) {
                     // TODO:ユーザーへの通知実装
                     console.error('小タスクが存在します')
+                    alert('小タスクが存在します')
                   } else {
                     dispatch(deleteTask(props.task.taskId))
                   }
@@ -77,10 +85,12 @@ const TaskListTask: FC<TaskListTaskProps> = (props) => {
         </p>
       </div>
       {isOpenChildTaskList ? (
-        <TaskList
-          parentTaskId={props.task.taskId}
-          depth={Number(props.depth) + 1}
-        />
+        <>
+          <TaskList
+            parentTaskId={props.task.taskId}
+            depth={Number(props.depth) + 1}
+          />
+        </>
       ) : (
         ''
       )}
