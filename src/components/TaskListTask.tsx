@@ -70,11 +70,12 @@ const TaskListTask: FC<TaskListTaskProps> = (props) => {
           <p>
             {taskDoneCount}/{taskCount.length}
           </p>
-          {/* メモ：checkedでwarningでwarningが出てしまう */}
           <input
             type="checkbox"
             checked={props.task.status}
-            onClick={() => handleOnStatus(props.task.taskId, props.task.status)}
+            onChange={() =>
+              handleOnStatus(props.task.taskId, props.task.status)
+            }
           />
         </div>
         <div className="flex justify-between">
@@ -93,7 +94,6 @@ const TaskListTask: FC<TaskListTaskProps> = (props) => {
                 icon={faTrashCan}
                 onClick={() => {
                   if (existChildTask()) {
-                    // TODO:ユーザーへの通知実装
                     console.error('小タスクが存在します')
                     alert('小タスクが存在します')
                   } else {
