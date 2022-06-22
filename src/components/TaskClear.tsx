@@ -1,17 +1,16 @@
 import { FC } from 'react'
-
+import { useDispatch } from 'react-redux'
+import { clearTaskList } from '../stores/TaskListSlice'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTrashCan } from '@fortawesome/free-solid-svg-icons'
 
-interface TaskClearProps {
-  clearTaskList: () => void
-}
+const TaskClear: FC<{}> = () => {
+  const dispatch = useDispatch()
 
-const TaskClear: FC<TaskClearProps> = (props) => {
   return (
     <button
       className="border-2 m-5 p-2 hover:opacity-50"
-      onClick={props.clearTaskList}
+      onClick={() => dispatch(clearTaskList())}
     >
       <span>すべて削除</span>
       <span className="m-1">
