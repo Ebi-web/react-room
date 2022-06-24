@@ -1,38 +1,38 @@
-name: deploy to GitHub Pages
+# name: deploy to GitHub Pages
 
-on:
-  push:
-    branches:
-      - main
-  pull_request:
-    branches:
-      - main
+# on:
+#   push:
+#     branches:
+#       - main
+#   pull_request:
+#     branches:
+#       - main
 
-jobs:
-  deployments:
-    runs-on: ubuntu-20.04
-    steps:
-      - uses: actions/checkout@v2
+# jobs:
+#   deployments:
+#     runs-on: ubuntu-20.04
+#     steps:
+#       - uses: actions/checkout@v2
 
-      - name: docker-compose up
-        run: |
-          docker-compose up -d
+#       - name: docker-compose up
+#         run: |
+#           docker-compose up -d
 
-      - name: yarn install
-        run: |
-          docker-compose exec -T web yarn install
+#       - name: yarn install
+#         run: |
+#           docker-compose exec -T web yarn install
 
-      - name: build nextjs
-        run: |
-          docker-compose exec -T web yarn build
+#       - name: build nextjs
+#         run: |
+#           docker-compose exec -T web yarn build
 
-      - name: export nextjs
-        run: |
-          docker-compose exec -T web yarn next export
+#       - name: export nextjs
+#         run: |
+#           docker-compose exec -T web yarn next export
 
-      - name: deploy
-        uses: peaceiris/actions-gh-pages@v3
-        if: ${{ github.ref == 'refs/heads/main' }}
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./out
+#       - name: deploy
+#         uses: peaceiris/actions-gh-pages@v3
+#         if: ${{ github.ref == 'refs/heads/main' }}
+#         with:
+#           github_token: ${{ secrets.GITHUB_TOKEN }}
+#           publish_dir: ./out
