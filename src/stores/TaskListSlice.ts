@@ -1,4 +1,4 @@
-import { createSlice, configureStore } from '@reduxjs/toolkit'
+import { createSlice } from '@reduxjs/toolkit'
 import type { Task } from '../types/Task'
 import { setTaskListToLocalStorage } from '../functions/localStorage'
 
@@ -78,9 +78,3 @@ export const taskListSlice = createSlice({
 
 export const { addTask, updateTask, deleteTask, setTaskList, clearTaskList } =
   taskListSlice.actions
-
-export const taskListStore = configureStore({
-  reducer: {
-    taskList: taskListSlice.reducer,
-  },
-})

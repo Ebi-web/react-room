@@ -12,6 +12,7 @@ import { deleteTask, setTaskList } from '../stores/TaskListSlice'
 import { setParentTaskId } from '../stores/TaskAddSlice'
 import type { Task } from '../types/Task'
 import TaskList from './TaskList'
+import TaskEdit from './TaskEdit'
 
 interface TaskListTaskProps {
   depth: Number
@@ -28,14 +29,14 @@ const TaskListTask: FC<TaskListTaskProps> = (props) => {
   )
   const taskDoneCount = taskCount
     .map((task) => task.status === true)
-    .filter((status) => status === true).length
+    .filter((status) => status).length
 
   const existChildTask = () => {
-    return taskListSelector.taskList.findIndex(
-      (task) => task.parentTaskId === props.task.taskId
-    ) >= 0
-      ? true
-      : false
+    return (
+      taskListSelector.taskList.findIndex(
+        (task) => task.parentTaskId === props.task.taskId
+      ) >= 0
+    )
   }
 
   const handleOnStatus = (taskId: string, status: boolean) => {
@@ -80,7 +81,9 @@ const TaskListTask: FC<TaskListTaskProps> = (props) => {
         </div>
         <div className="flex justify-between">
           <span className="text-xl font-semibold">{props.task.taskName}</span>
-          <div>
+          <div className="flex justify-between">
+            <TaskEdit task={props.task}></TaskEdit>
+            {/*add task button*/}
             <span className="m-1 select-none hover:opacity-50">
               <FontAwesomeIcon
                 icon={faPlus}
@@ -89,6 +92,8 @@ const TaskListTask: FC<TaskListTaskProps> = (props) => {
                 }}
               />
             </span>
+
+            {/*delete task button*/}
             <span className="m-1 select-none hover:opacity-50">
               <FontAwesomeIcon
                 icon={faTrashCan}

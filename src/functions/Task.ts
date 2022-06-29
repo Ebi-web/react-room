@@ -17,3 +17,5 @@ export function validateTask(task: Task): string {
   }
   return ''
 }
+
+export const DateFormat = 'YYYY-MM-DD'

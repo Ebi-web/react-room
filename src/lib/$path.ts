@@ -8,6 +8,7 @@ export const pagesPath = {
 export type PagesPath = typeof pagesPath
 
 export const staticPath = {
+  _nojekyll: '/.nojekyll',
   favicon_ico: '/favicon.ico',
 } as const
 

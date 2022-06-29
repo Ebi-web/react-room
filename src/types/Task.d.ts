@@ -7,7 +7,7 @@ interface Task {
   taskId: string // ulid
   parentTaskId: ParentTaskIdType
   taskName: string
-  dueDate: string // YYYY-MM-DD
+  dueDate: string // YYYY-MM-DD でもDate型かdayjs系の型に変えたい...
   status: ChangeStatus
 }
 

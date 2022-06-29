@@ -1,101 +1,106 @@
-import { FC, useState } from 'react'
+import { FC, FormEvent, useState } from 'react'
+import { useDispatch } from 'react-redux'
+import { updateTask } from '../stores/TaskListSlice'
 import type { Task } from '../types/Task'
-import { validateTask, updateTask } from '../types/Task'
-import { Alert, Button, Label, Modal, TextInput } from 'flowbite-react'
+import { Modal, TextInput, Button, Group, Box } from '@mantine/core'
+import { DatePicker } from '@mantine/dates'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faPencil, faPlus } from '@fortawesome/free-solid-svg-icons'
+import dayjs from 'dayjs'
+import { DateFormat, validateTask } from '../functions/Task'
+import { showNotification } from '@mantine/notifications'
 
-interface TaskEditProps {
+interface EditAction {
   task: Task
-  setTaskList: (taskList: Task[]) => void
 }
 
-const EditTaskButton: FC<TaskEditProps> = (props) => {
-  const [inputTaskName, setInputTaskName] = useState(props.task.taskName)
-  const [inputDueDate, setInputDueDate] = useState(props.task.dueDate)
-  const [errMessage, setErrMessage] = useState('')
-  const [isModalOpen, setIsModalOpen] = useState(false)
+const TaskEdit: FC<EditAction> = (props) => {
+  const [opened, setOpened] = useState(false)
+  const [taskName, setTaskName] = useState(props.task.taskName)
+  const [dueDate, setDueDate] = useState(new Date(props.task.dueDate))
+  const dispatch = useDispatch()
 
-  const updateTaskLocal = () => {
+  const updateTaskLocal = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    const task: Task = {
+      ...props.task,
+      dueDate: dayjs(dueDate).format(DateFormat),
+      taskName,
+    }
+
     //validation
-    const updatedTask: Task = {
-      taskId: props.task.taskId,
-      taskName: inputTaskName,
-      dueDate: inputDueDate,
-    }
-    const msg = validateTask(updatedTask)
-    if (msg !== '') {
-      setErrMessage(msg)
+    const msg = validateTask(task)
+    if (msg) {
+      showNotification({
+        title: 'タスクの編集に失敗しました',
+        message: msg,
+        autoClose: 5000,
+        color: 'red',
+      })
       return
     }
 
-    //execute update
-    try {
-      updateTask(updatedTask, props.setTaskList)
-    } catch (err) {
-      setErrMessage('タスクの編集に失敗しました')
-      return
-    }
-
+    showNotification({
+      message: 'タスクの編集に成功しました',
+      autoClose: 5000,
+      color: 'green',
+    })
     //clean up
-    setErrMessage('')
-    setIsModalOpen(false)
+    setOpened(false)
+
+    dispatch(updateTask(task))
   }
 
   return (
     <>
-      <Button onClick={() => setIsModalOpen(true)}>タスクの編集</Button>
+      {/*edit button*/}
+      <span className="m-1 select-none hover:opacity-50">
+        <FontAwesomeIcon
+          icon={faPencil}
+          onClick={() => {
+            setOpened(true)
+          }}
+        />
+      </span>
+
       <Modal
-        show={isModalOpen}
-        size="md"
-        popup={true}
-        onClose={() => setIsModalOpen(false)}
+        centered
+        opened={opened}
+        onClose={() => setOpened(false)}
+        title={`タスク:${props.task.taskName}を編集`}
       >
-        <Modal.Header />
-        <Modal.Body className="space-y-6 px-6 pb-4 sm:pb-6 lg:px-8 xl:pb-8">
-          <h3 className="text-xl font-medium text-gray-900 dark:text-white">
-            タスクの編集
-          </h3>
-          <div>
-            <Label className="mb-2 block" htmlFor="task-name">
-              タスク名
-            </Label>
+        <Box sx={{ maxWidth: 300 }} mx="auto">
+          <form onSubmit={(e) => updateTaskLocal(e)}>
             <TextInput
-              id="task-name"
-              className="dark:border-gray-500 dark:bg-gray-600"
-              value={inputTaskName}
-              onChange={(event) => setInputTaskName(event.target.value)}
-              required={true}
+              required
+              label="タスク名"
+              value={taskName}
+              onChange={(e) => setTaskName(e.target.value)}
             />
-          </div>
-          <div>
-            <Label className="mb-2 block" htmlFor="due-date">
-              締め切り
-            </Label>
-            <TextInput
-              id="due-date"
-              className="dark:border-gray-500 dark:bg-gray-600"
-              type="date"
-              value={inputDueDate}
-              onChange={(event) => setInputDueDate(event.target.value)}
-              required={true}
+
+            <DatePicker
+              placeholder="締切日を選択してください"
+              label="締切日"
+              required
+              value={dueDate}
+              onChange={(e) =>
+                e == null ? setDueDate(new Date()) : setDueDate(e)
+              }
             />
-          </div>
-          <Button className="w-full" onClick={() => updateTaskLocal()}>
-            編集確定
-          </Button>
-          {errMessage ? (
-            <Alert color="red">
-              <span>
-                <span className="font-medium">編集に失敗しました</span>{' '}
-                {errMessage}
-              </span>
-            </Alert>
-          ) : (
-            ''
-          )}
-        </Modal.Body>
+
+            <Group position="right" mt="md">
+              <button
+                type="submit"
+                className="border-2 m-5 p-2 rounded-md shadow-md hover:shadow-none"
+              >
+                <span className="m-1">確認</span>
+              </button>
+            </Group>
+          </form>
+        </Box>
       </Modal>
     </>
   )
 }
 
-export default EditTaskButton
+export default TaskEdit

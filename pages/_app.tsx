@@ -7,11 +7,17 @@ import { AppProps } from 'next/app'
 
 import { Provider } from 'react-redux'
 import { store } from '../src/stores/store'
+import { MantineProvider } from '@mantine/core'
+import { NotificationsProvider } from '@mantine/notifications'
 
 export default function MyApp({ Component, pageProps }: AppProps) {
   return (
     <Provider store={store}>
-      <Component {...pageProps} />
+      <MantineProvider>
+        <NotificationsProvider>
+          <Component {...pageProps} />
+        </NotificationsProvider>
+      </MantineProvider>
     </Provider>
   )
 }
