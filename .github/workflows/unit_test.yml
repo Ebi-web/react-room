@@ -18,9 +18,9 @@ jobs:
           node-version: 14.18.1
 
       - name: install packages
-        runs: |
+        run: |
           yarn install
 
       - name: run unit test
-        runs: |
+        run: |
           yarn unit
