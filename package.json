@@ -11,7 +11,7 @@
     "serve": "run-s build start",
     "lint": "next lint",
     "prettier": "prettier --check .",
-    "unit": "yarn install && jest",
+    "unit": "jest",
     "e2e": "playwright test",
     "test": "run-p -l -c --aggregate-output lint prettier unit",
     "fix": "run-s -l -c fix:lint fix:prettier",
