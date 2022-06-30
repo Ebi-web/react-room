@@ -6,7 +6,7 @@ import { RootState } from '../stores/store'
 
 interface TaskListProps {
   parentTaskId: ParentTaskIdType
-  depth: Number
+  depth: Number // the depth of Nth level is N-1
 }
 
 const TaskList: FC<TaskListProps> = (props) => {

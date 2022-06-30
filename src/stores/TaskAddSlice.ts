@@ -1,4 +1,4 @@
-import { createSlice, configureStore } from '@reduxjs/toolkit'
+import { createSlice } from '@reduxjs/toolkit'
 import type { ParentTaskIdType } from '../types/Task'
 
 export interface TaskAddState {
@@ -24,9 +24,3 @@ export const taskAddSlice = createSlice({
 })
 
 export const { setParentTaskId } = taskAddSlice.actions
-
-export const taskAddStore = configureStore({
-  reducer: {
-    parentTaskId: taskAddSlice.reducer,
-  },
-})

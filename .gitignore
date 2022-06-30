@@ -36,5 +36,4 @@ yarn-error.log*
 # Optional eslint cache
 .eslintcache
 
-__tests__/.idea
-/.gitconfig
+.gitconfig
