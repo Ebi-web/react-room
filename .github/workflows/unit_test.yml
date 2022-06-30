@@ -1,4 +1,4 @@
-name: 'Jest Unit(Component) Test'
+name: 'Jest Unit Test'
 on:
   push:
     branches:
@@ -13,14 +13,18 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
 
-      - name: docker-compose up
-        run: |
-          docker-compose up -d
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 14.18.1
+
+      - name: install packages
+        runs: |
+          yarn install
 
       - name: run yarn install
         run: |
           docker-compose exec -T web yarn install
 
       - name: run unit test
-        run: |
-          docker-compose exec -T web yarn unit
+        runs: |
+          yarn unit
