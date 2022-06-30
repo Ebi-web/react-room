@@ -17,6 +17,10 @@ jobs:
         run: |
           docker-compose up -d
 
+      - name: run yarn install
+        run: |
+          docker-compose exec -T web yarn install
+
       - name: run unit test
         run: |
           docker-compose exec -T web yarn unit
