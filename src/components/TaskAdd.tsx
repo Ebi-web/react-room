@@ -1,32 +1,32 @@
-import { FC, useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import { FC, FormEvent, useState } from 'react'
+import { useDispatch } from 'react-redux'
 import { ulid } from 'ulid'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPlus } from '@fortawesome/free-solid-svg-icons'
-import type { Task } from '../types/Task'
+import type { ParentTaskIdType, Task } from '../types/Task'
 import { DateFormat, validateTask } from '../functions/Task'
 import { addTask } from '../stores/TaskListSlice'
-import { RootState } from '../stores/store'
 import { DatePicker } from '@mantine/dates'
 import dayjs from 'dayjs'
 import { showNotification } from '@mantine/notifications'
-import { TextInput } from '@mantine/core'
+import { Box, Group, Modal, TextInput } from '@mantine/core'
 
-const TaskAdd: FC = () => {
+interface TaskAddParameters {
+  parentTaskId: ParentTaskIdType
+}
+
+const TaskAdd: FC<TaskAddParameters> = (props) => {
   // local
+  const [opened, setOpened] = useState(false)
   const [inputTaskName, setInputTaskName] = useState('')
   const [inputDate, setInputDate] = useState(new Date())
-
-  // global
-  const parentTaskIdSelector = useSelector(
-    (state: RootState) => state.parentTaskId
-  )
   const dispatch = useDispatch()
 
-  const addTaskLocal = () => {
+  const addTaskLocal = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
     const newTask: Task = {
       taskId: ulid(),
-      parentTaskId: parentTaskIdSelector.parentTaskId,
+      parentTaskId: props.parentTaskId,
       taskName: inputTaskName,
       dueDate: dayjs(inputDate).format(DateFormat),
       status: false,
@@ -42,51 +42,74 @@ const TaskAdd: FC = () => {
       return
     }
 
+    dispatch(addTask(newTask))
+
     showNotification({
       message: 'タスクの追加に成功しました',
       autoClose: 5000,
       color: 'green',
     })
-    dispatch(addTask(newTask))
+    setOpened(false)
+    setInputTaskName('')
+  }
+
+  const onClose = () => {
+    setOpened(false)
     setInputTaskName('')
   }
 
   return (
-    <div className="border">
-      <div>
-        <span className="text-red-500">
-          **開発用表示** 親タスクID: {parentTaskIdSelector.parentTaskId}
+    <>
+      {/*edit button*/}
+      <button className="border-2 m-5 p-2 hover:opacity-50">
+        <span className="m-1 select-none hover:opacity-50">
+          <FontAwesomeIcon
+            icon={faPlus}
+            onClick={() => {
+              setOpened(true)
+            }}
+          />
         </span>
-      </div>
-      <div className="flex justify-start">
-        <TextInput
-          placeholder="タスク名"
-          label="新規タスク名"
-          value={inputTaskName}
-          onChange={(event) => setInputTaskName(event.target.value)}
-          required
-        />
+        <span>追加</span>
+      </button>
 
-        <DatePicker
-          placeholder="締切日を選択してください"
-          label="締切日"
-          required
-          value={inputDate}
-          onChange={(e) =>
-            e == null ? setInputDate(new Date()) : setInputDate(e)
-          }
-        />
+      <Modal
+        centered
+        opened={opened}
+        onClose={() => onClose()}
+        title="タスクを追加"
+      >
+        <Box sx={{ maxWidth: 300 }} mx="auto">
+          <form onSubmit={(e) => addTaskLocal(e)}>
+            <TextInput
+              required
+              label="タスク名"
+              value={inputTaskName}
+              onChange={(e) => setInputTaskName(e.target.value)}
+            />
 
-        <button
-          type="submit"
-          className="border-2 m-5 p-2 rounded-md shadow-md hover:shadow-none"
-          onClick={addTaskLocal}
-        >
-          <span className="m-1">追加</span>
-          <FontAwesomeIcon icon={faPlus} />
-        </button>
-      </div>
-    </div>
+            <DatePicker
+              placeholder="締切日を選択してください"
+              label="締切日"
+              required
+              value={inputDate}
+              onChange={(e) =>
+                e == null ? setInputDate(new Date()) : setInputDate(e)
+              }
+            />
+
+            <Group position="right" mt="md">
+              <button
+                type="submit"
+                className="border-2 m-5 p-2 rounded-md shadow-md hover:shadow-none"
+              >
+                <span className="m-1">確認</span>
+              </button>
+            </Group>
+          </form>
+        </Box>
+      </Modal>
+    </>
   )
 }
 
