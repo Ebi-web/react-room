@@ -61,14 +61,14 @@ const TaskAdd: FC<TaskAddParameters> = (props) => {
   return (
     <>
       {/*edit button*/}
-      <button className="border-2 m-5 p-2 hover:opacity-50">
+      <button
+        className="border-2 m-5 p-2 hover:opacity-50"
+        onClick={() => {
+          setOpened(true)
+        }}
+      >
         <span className="m-1 select-none hover:opacity-50">
-          <FontAwesomeIcon
-            icon={faPlus}
-            onClick={() => {
-              setOpened(true)
-            }}
-          />
+          <FontAwesomeIcon icon={faPlus} />
         </span>
         <span>追加</span>
       </button>

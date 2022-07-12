@@ -86,19 +86,19 @@ const TaskListTask: FC<TaskListTaskProps> = (props) => {
             {/*add task button*/}
             <TaskAdd parentTaskId={props.task.taskId} />
             {/*delete task button*/}
-            <button className="border-2 m-5 p-2 hover:opacity-50">
+            <button
+              className="border-2 m-5 p-2 hover:opacity-50"
+              onClick={() => {
+                if (existChildTask()) {
+                  console.error('小タスクが存在します')
+                  alert('小タスクが存在します')
+                } else {
+                  dispatch(deleteTask(props.task.taskId))
+                }
+              }}
+            >
               <span className="m-1 select-none hover:opacity-50">
-                <FontAwesomeIcon
-                  icon={faTrashCan}
-                  onClick={() => {
-                    if (existChildTask()) {
-                      console.error('小タスクが存在します')
-                      alert('小タスクが存在します')
-                    } else {
-                      dispatch(deleteTask(props.task.taskId))
-                    }
-                  }}
-                />
+                <FontAwesomeIcon icon={faTrashCan} />
               </span>
               <span>削除</span>
             </button>
