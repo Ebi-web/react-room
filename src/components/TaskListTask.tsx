@@ -13,6 +13,8 @@ import { setParentTaskId } from '../stores/TaskAddSlice'
 import type { Task } from '../types/Task'
 import TaskList from './TaskList'
 import TaskEdit from './TaskEdit'
+import { validateClosingTask, validateReopeningTask } from '../functions/Task'
+import { showNotification } from '@mantine/notifications'
 
 interface TaskListTaskProps {
   depth: Number
@@ -42,14 +44,35 @@ const TaskListTask: FC<TaskListTaskProps> = (props) => {
   const handleOnStatus = (taskId: string, status: boolean) => {
     const deepCopy = taskListSelector.taskList.map((todo) => ({ ...todo }))
 
+    //validation
+    const res = status
+      ? validateReopeningTask(props.task, deepCopy)
+      : validateClosingTask(props.task, deepCopy)
+
+    //notify if validation is successful
+    if (!res.success) {
+      showNotification({
+        title: 'ステータスの更新に失敗しました',
+        message: res.message,
+        autoClose: 5000,
+        color: 'red',
+      })
+      return
+    }
+
+    //update status if validation is successful
     const newTodos = deepCopy.map((todo) => {
       if (todo.taskId === taskId) {
         todo.status = !status
       }
       return todo
     })
-
     dispatch(setTaskList(newTodos))
+    showNotification({
+      message: 'ステータスの更新に成功しました',
+      autoClose: 5000,
+      color: 'green',
+    })
   }
 
   return (
