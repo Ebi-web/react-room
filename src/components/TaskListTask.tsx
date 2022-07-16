@@ -4,15 +4,14 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
   faAngleRight,
   faAngleDown,
-  faPlus,
   faTrashCan,
 } from '@fortawesome/free-solid-svg-icons'
 import { RootState } from '../stores/store'
 import { deleteTask, setTaskList } from '../stores/TaskListSlice'
-import { setParentTaskId } from '../stores/TaskAddSlice'
 import type { Task } from '../types/Task'
 import TaskList from './TaskList'
 import TaskEdit from './TaskEdit'
+import TaskAdd from './TaskAdd'
 
 interface TaskListTaskProps {
   depth: Number
@@ -82,31 +81,27 @@ const TaskListTask: FC<TaskListTaskProps> = (props) => {
         <div className="flex justify-between">
           <span className="text-xl font-semibold">{props.task.taskName}</span>
           <div className="flex justify-between">
-            <TaskEdit task={props.task}></TaskEdit>
+            {/*edit task button*/}
+            <TaskEdit task={props.task} />
             {/*add task button*/}
-            <span className="m-1 select-none hover:opacity-50">
-              <FontAwesomeIcon
-                icon={faPlus}
-                onClick={() => {
-                  dispatch(setParentTaskId(props.task.taskId))
-                }}
-              />
-            </span>
-
+            <TaskAdd parentTaskId={props.task.taskId} />
             {/*delete task button*/}
-            <span className="m-1 select-none hover:opacity-50">
-              <FontAwesomeIcon
-                icon={faTrashCan}
-                onClick={() => {
-                  if (existChildTask()) {
-                    console.error('小タスクが存在します')
-                    alert('小タスクが存在します')
-                  } else {
-                    dispatch(deleteTask(props.task.taskId))
-                  }
-                }}
-              />
-            </span>
+            <button
+              className="border-2 m-5 p-2 hover:opacity-50"
+              onClick={() => {
+                if (existChildTask()) {
+                  console.error('小タスクが存在します')
+                  alert('小タスクが存在します')
+                } else {
+                  dispatch(deleteTask(props.task.taskId))
+                }
+              }}
+            >
+              <span className="m-1 select-none hover:opacity-50">
+                <FontAwesomeIcon icon={faTrashCan} />
+              </span>
+              <span>削除</span>
+            </button>
           </div>
         </div>
         <p className="font-light mt-2 text-xs">
