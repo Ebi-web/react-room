@@ -34,18 +34,16 @@ const Index: FC<void> = () => {
           <TaskClear />
         </div>
         <div>
-          
-        <div>
           <TaskAdd parentTaskId={null} />
         </div>
         <form action="" className="flex justify-center">
-            <input
-              type="text"
-              className="my-8  rounded border border-black"
-              placeholder="search"
-              onChange={(e) => setSearch(e.target.value)}
-            />
-          </form>
+          <input
+            type="text"
+            className="my-8  rounded border border-black"
+            placeholder="search"
+            onChange={(e) => setSearch(e.target.value)}
+          />
+        </form>
       </div>
 
       <div className="ml-8">
