@@ -17,6 +17,7 @@ import TaskEdit from './TaskEdit'
 interface TaskListTaskProps {
   depth: Number
   task: Task
+  searchNow?: boolean
 }
 
 const TaskListTask: FC<TaskListTaskProps> = (props) => {
@@ -115,10 +116,23 @@ const TaskListTask: FC<TaskListTaskProps> = (props) => {
       </div>
       {isOpenChildTaskList ? (
         <>
-          <TaskList
-            parentTaskId={props.task.taskId}
-            depth={Number(props.depth) + 1}
-          />
+          {props.searchNow ? (
+            <>
+              <TaskList
+                parentTaskId={props.task.taskId}
+                depth={Number(props.depth) + 1}
+                isSearch={false}
+              />
+            </>
+          ) : (
+            <>
+              <TaskList
+                parentTaskId={props.task.taskId}
+                depth={Number(props.depth) + 1}
+                isSearch={true}
+              />
+            </>
+          )}
         </>
       ) : (
         ''
