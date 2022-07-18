@@ -1,7 +1,6 @@
 import { useEffect, FC, ChangeEvent, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { setTaskList } from '../src/stores/TaskListSlice'
-import { setParentTaskId } from '../src/stores/TaskAddSlice'
 import { getAllTaskListFromLocalStorage } from '../src/functions/localStorage'
 import Header from '../src/components/Header'
 import TaskAdd from '../src/components/TaskAdd'
@@ -30,24 +29,16 @@ const Index: FC<void> = () => {
     <>
       <Header />
 
-      <div>
-        <TaskAdd />
-      </div>
-
       <div className="flex">
-        <button
-          className="border-2 m-5 p-2 hover:opacity-50"
-          onClick={() => dispatch(setParentTaskId(null))}
-        >
-          タスク追加の開発用：親タスクIDのリセット
-        </button>
-
         <div>
           <TaskClear />
         </div>
-
         <div>
-          <form action="" className="flex justify-center">
+          
+        <div>
+          <TaskAdd parentTaskId={null} />
+        </div>
+        <form action="" className="flex justify-center">
             <input
               type="text"
               className="my-8  rounded border border-black"
@@ -55,7 +46,6 @@ const Index: FC<void> = () => {
               onChange={(e) => setSearch(e.target.value)}
             />
           </form>
-        </div>
       </div>
 
       <div className="ml-8">
