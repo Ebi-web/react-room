@@ -4,11 +4,11 @@ import { updateTask } from '../stores/TaskListSlice'
 import type { Task } from '../types/Task'
 import { Modal, TextInput, Group, Box } from '@mantine/core'
 import { DatePicker } from '@mantine/dates'
+import { showNotification } from '@mantine/notifications'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPencil } from '@fortawesome/free-solid-svg-icons'
 import dayjs from 'dayjs'
 import { DateFormat, validateTask } from '../functions/Task'
-import { showNotification } from '@mantine/notifications'
 
 interface EditAction {
   task: Task

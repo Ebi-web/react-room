@@ -1,14 +1,17 @@
 import { FC, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import { Menu } from '@mantine/core'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
   faAngleRight,
   faAngleDown,
   faTrashCan,
+  faTags,
 } from '@fortawesome/free-solid-svg-icons'
-import { RootState } from '../stores/store'
+import type { RootState } from '../stores/store'
 import { deleteTask, setTaskList } from '../stores/TaskListSlice'
-import type { Task } from '../types/Task'
+import { setIsOpenLabelAdd } from '../stores/ModalSlice'
+import type { Task, Label } from '../types/Task'
 import TaskList from './TaskList'
 import TaskEdit from './TaskEdit'
 import TaskAdd from './TaskAdd'
@@ -17,6 +20,19 @@ interface TaskListTaskProps {
   depth: Number
   task: Task
 }
+
+const labelListSample: Label[] = [
+  {
+    id: '1',
+    name: 'ラベル1',
+    color: '#000000',
+  },
+  {
+    id: '2',
+    name: 'ラベル2',
+    color: '#ff0000',
+  },
+]
 
 const TaskListTask: FC<TaskListTaskProps> = (props) => {
   const [isOpenChildTaskList, setIsOpenChildTaskList] = useState(false)
@@ -54,25 +70,28 @@ const TaskListTask: FC<TaskListTaskProps> = (props) => {
   return (
     <div>
       <div
-        className="border w-1/2 flex-col flex break-words mb-3 p-3 rounded-xl shadow-md cursor-pointer	hover:shadow-inner"
+        className="border w-1/2 flex-col flex break-words mb-3 p-3 rounded-xl shadow-md	hover:shadow-inner"
         data-testid={`task-${props.task.taskId}`}
         key={props.task.taskId}
       >
         <div className="flex gap-6">
-          <span className="m-1 select-none hover:opacity-50">
+          <span
+            className="pl-1 pr-1 select-none cursor-pointer hover:opacity-50"
+            onClick={() => {
+              setIsOpenChildTaskList(!isOpenChildTaskList)
+            }}
+          >
             <FontAwesomeIcon
               icon={isOpenChildTaskList ? faAngleDown : faAngleRight}
-              onClick={() => {
-                setIsOpenChildTaskList(!isOpenChildTaskList)
-              }}
             />
           </span>
-          <p>
+          <p className="select-none">
             {taskDoneCount}/{taskCount.length}
           </p>
           <input
             type="checkbox"
             checked={props.task.status}
+            className="cursor-pointer mt-1"
             onChange={() =>
               handleOnStatus(props.task.taskId, props.task.status)
             }
@@ -104,9 +123,36 @@ const TaskListTask: FC<TaskListTaskProps> = (props) => {
             </button>
           </div>
         </div>
-        <p className="font-light mt-2 text-xs">
-          締め切り: {props.task.dueDate}
-        </p>
+        <div className="flex justify-between">
+          <span className="font-light mt-2 text-s">
+            締め切り: {props.task.dueDate}
+          </span>
+          {/* ラベルレイアウト */}
+          <div>ラベル1</div>
+          <div>ラベル2</div>
+          <Menu
+            control={
+              <button className="border-2 p-1 hover:opacity-50">
+                <FontAwesomeIcon icon={faTags} />
+                ラベル付け
+              </button>
+            }
+          >
+            {labelListSample.map((label) => (
+              <Menu.Item key={label.id} color={label.color} onClick={() => {}}>
+                {label.name}
+              </Menu.Item>
+            ))}
+            <Menu.Item
+              onClick={() => {
+                // open modal
+                dispatch(setIsOpenLabelAdd(true))
+              }}
+            >
+              ラベル追加
+            </Menu.Item>
+          </Menu>
+        </div>
       </div>
       {isOpenChildTaskList ? (
         <>
