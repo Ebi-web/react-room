@@ -1,10 +1,11 @@
-import { FC, useState } from 'react'
+import { FC, FormEvent, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { Box, Group, Modal, TextInput, ColorPicker } from '@mantine/core'
 import { showNotification } from '@mantine/notifications'
 import { getNewLabel } from '../functions/Label'
 import type { RootState } from '../stores/store'
 import { setIsOpenLabelAdd } from '../stores/ModalSlice'
+import { labelListAddLabel } from '../stores/LabelListSlice'
 
 interface LabelAddProps {}
 
@@ -32,22 +33,26 @@ const LabelAddModal: FC<LabelAddProps> = () => {
   const modalSelector = useSelector((state: RootState) => state.modal)
   const dispatch = useDispatch()
 
-  const addLabel = () => {
+  const addLabel = (e: FormEvent<HTMLFormElement>) => {
+    // page refresh を防ぐため
+    e.preventDefault()
+
     const newLabel = getNewLabel({
       labelName: inputLabelName,
       labelColor: inputColorHex,
     })
 
-    // add label to global state
-
-    // close modal
-    dispatch(setIsOpenLabelAdd(false))
+    dispatch(labelListAddLabel(newLabel))
 
     showNotification({
       message: 'ラベルの追加に成功しました',
       autoClose: 5000,
       color: 'green',
     })
+
+    setInputLabelName('')
+    setInputColorHex('#000000')
+    dispatch(setIsOpenLabelAdd(false))
   }
 
   return (
@@ -61,7 +66,7 @@ const LabelAddModal: FC<LabelAddProps> = () => {
         title="ラベルを追加"
       >
         <Box sx={{ maxWidth: 300 }} mx="auto">
-          <form onSubmit={() => addLabel()}>
+          <form onSubmit={(e) => addLabel(e)}>
             <TextInput
               label="ラベル名"
               value={inputLabelName}

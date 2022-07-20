@@ -16,7 +16,6 @@ export const modalSlice = createSlice({
   reducers: {
     setIsOpenLabelAdd(state: ModalState, { payload }: ModalStatePayload) {
       return {
-        ...state,
         isOpenLabelAdd: payload,
       }
     },

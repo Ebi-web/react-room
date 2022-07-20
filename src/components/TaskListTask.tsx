@@ -21,22 +21,10 @@ interface TaskListTaskProps {
   task: Task
 }
 
-const labelListSample: Label[] = [
-  {
-    id: '1',
-    name: 'ラベル1',
-    color: '#000000',
-  },
-  {
-    id: '2',
-    name: 'ラベル2',
-    color: '#ff0000',
-  },
-]
-
 const TaskListTask: FC<TaskListTaskProps> = (props) => {
   const [isOpenChildTaskList, setIsOpenChildTaskList] = useState(false)
   const taskListSelector = useSelector((state: RootState) => state.taskList)
+  const labelListSelector = useSelector((state: RootState) => state.labelList)
   const dispatch = useDispatch()
 
   const taskCount = taskListSelector.taskList.filter(
@@ -138,7 +126,7 @@ const TaskListTask: FC<TaskListTaskProps> = (props) => {
               </button>
             }
           >
-            {labelListSample.map((label) => (
+            {labelListSelector.labelList.map((label) => (
               <Menu.Item key={label.id} color={label.color} onClick={() => {}}>
                 {label.name}
               </Menu.Item>
