@@ -1,6 +1,7 @@
-import type { Task } from '../types/Task'
+import type { Task, Label } from '../types/Task'
 
 const TASK_LIST_NAME = 'taskList'
+const LABEL_LIST_NAME = 'labelList'
 
 const getAllTaskListFromLocalStorage = (): Task[] => {
   const taskListString = localStorage.getItem(TASK_LIST_NAME)
@@ -27,9 +28,23 @@ const updateTaskInLocalStorage = (givenTask: Task): void => {
   setTaskListToLocalStorage(taskList)
 }
 
+const getAllLabelListFromLocalStorage = (): Label[] => {
+  const labelListString = localStorage.getItem(LABEL_LIST_NAME)
+  if (labelListString === null) {
+    return []
+  }
+  return JSON.parse(labelListString) as Label[]
+}
+
+const setLabelListToLocalStorage = (labelList: Label[]) => {
+  localStorage.setItem(LABEL_LIST_NAME, JSON.stringify(labelList))
+}
+
 export {
   getAllTaskListFromLocalStorage,
   setTaskListToLocalStorage,
   getTaskFromLocalStorage,
   updateTaskInLocalStorage,
+  getAllLabelListFromLocalStorage,
+  setLabelListToLocalStorage,
 }

@@ -7,11 +7,12 @@ import {
   faAngleDown,
   faTrashCan,
   faTags,
+  faXmark,
 } from '@fortawesome/free-solid-svg-icons'
 import type { RootState } from '../stores/store'
-import { deleteTask, setTaskList } from '../stores/TaskListSlice'
+import { deleteTask, updateTask, setTaskList } from '../stores/TaskListSlice'
 import { setIsOpenLabelAdd } from '../stores/ModalSlice'
-import type { Task, Label } from '../types/Task'
+import type { Task } from '../types/Task'
 import TaskList from './TaskList'
 import TaskEdit from './TaskEdit'
 import TaskAdd from './TaskAdd'
@@ -53,6 +54,29 @@ const TaskListTask: FC<TaskListTaskProps> = (props) => {
     })
 
     dispatch(setTaskList(newTodos))
+  }
+
+  const giveLabeltoTask = (add_label_id: string) => {
+    const updateAssignLabelIdList = [
+      ...props.task.assignLabelIdList,
+      add_label_id,
+    ]
+    const newTask = {
+      ...props.task,
+      assignLabelIdList: updateAssignLabelIdList,
+    }
+    dispatch(updateTask(newTask))
+  }
+
+  const removeLabelFromTask = (remove_label_id: string) => {
+    const updateAssignLabelIdList = [...props.task.assignLabelIdList].filter(
+      (label_id) => label_id !== remove_label_id
+    )
+    const newTask = {
+      ...props.task,
+      assignLabelIdList: updateAssignLabelIdList,
+    }
+    dispatch(updateTask(newTask))
   }
 
   return (
@@ -116,8 +140,29 @@ const TaskListTask: FC<TaskListTaskProps> = (props) => {
             締め切り: {props.task.dueDate}
           </span>
           {/* ラベルレイアウト */}
-          <div>ラベル1</div>
-          <div>ラベル2</div>
+          <div className="flex">
+            {labelListSelector.labelList
+              .filter((label) =>
+                props.task.assignLabelIdList.includes(label.id)
+              )
+              .map((label) => (
+                <div
+                  key={label.id}
+                  style={{ backgroundColor: label.color }}
+                  className="p-1 m-1 rounded"
+                >
+                  <span className="text-center w-20">{label.name}</span>
+                  <span
+                    className="pl-2  cursor-pointer"
+                    onClick={() => {
+                      removeLabelFromTask(label.id)
+                    }}
+                  >
+                    <FontAwesomeIcon icon={faXmark} />
+                  </span>
+                </div>
+              ))}
+          </div>
           <Menu
             control={
               <button className="border-2 p-1 hover:opacity-50">
@@ -126,11 +171,23 @@ const TaskListTask: FC<TaskListTaskProps> = (props) => {
               </button>
             }
           >
-            {labelListSelector.labelList.map((label) => (
-              <Menu.Item key={label.id} color={label.color} onClick={() => {}}>
-                {label.name}
-              </Menu.Item>
-            ))}
+            {labelListSelector.labelList
+              .filter(
+                (label) => !props.task.assignLabelIdList.includes(label.id)
+              )
+              .map((label) => (
+                <Menu.Item
+                  key={label.id}
+                  style={{
+                    backgroundColor: label.color,
+                  }}
+                  onClick={() => {
+                    giveLabeltoTask(label.id)
+                  }}
+                >
+                  {label.name}
+                </Menu.Item>
+              ))}
             <Menu.Item
               onClick={() => {
                 // open modal

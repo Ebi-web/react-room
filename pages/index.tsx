@@ -1,7 +1,11 @@
 import { useEffect, FC } from 'react'
 import { useDispatch } from 'react-redux'
 import { setTaskList } from '../src/stores/TaskListSlice'
-import { getAllTaskListFromLocalStorage } from '../src/functions/localStorage'
+import { setLabelList } from '../src/stores/LabelListSlice'
+import {
+  getAllTaskListFromLocalStorage,
+  getAllLabelListFromLocalStorage,
+} from '../src/functions/localStorage'
 import Header from '../src/components/Header'
 import TaskAdd from '../src/components/TaskAdd'
 import TaskClear from '../src/components/TaskClear'
@@ -14,6 +18,8 @@ const Index: FC<void> = () => {
   useEffect(() => {
     const loadedTaskList = getAllTaskListFromLocalStorage()
     dispatch(setTaskList(loadedTaskList))
+    const loadedLabelList = getAllLabelListFromLocalStorage()
+    dispatch(setLabelList(loadedLabelList))
   }, [])
 
   return (
