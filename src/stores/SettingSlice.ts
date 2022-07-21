@@ -1,9 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
-import type { SortKeyType } from '../types/SettingType'
-
-export interface SettingState {
-  sortKeyType: SortKeyType
-}
+import type { SettingState } from '../types/SettingType'
 
 interface SetSetting {
   payload: SettingState
@@ -13,11 +9,13 @@ export const settingSlice = createSlice({
   name: 'Setting',
   initialState: {
     sortKeyType: 'none',
+    sortPriorityLabelIdList: [],
   } as SettingState,
   reducers: {
     setSetting(_: SettingState, { payload }: SetSetting) {
       return {
         sortKeyType: payload.sortKeyType,
+        sortPriorityLabelIdList: payload.sortPriorityLabelIdList,
       }
     },
   },
