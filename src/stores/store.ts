@@ -2,7 +2,8 @@ import { configureStore } from '@reduxjs/toolkit'
 import { TaskAddState, taskAddSlice } from './TaskAddSlice'
 import { TaskListState, taskListSlice } from './TaskListSlice'
 import { LabelListState, labelListSlice } from './LabelListSlice'
-import { SettingState, settingSlice } from './SettingSlice'
+import type { SettingState } from '../types/SettingType'
+import { settingSlice } from './SettingSlice'
 import { ModalState, modalSlice } from './ModalSlice'
 
 export interface RootState {
