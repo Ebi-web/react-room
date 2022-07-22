@@ -30,6 +30,7 @@ const TaskAdd: FC<TaskAddParameters> = (props) => {
       taskName: inputTaskName,
       dueDate: dayjs(inputDate).format(DateFormat),
       status: false,
+      assignLabelIdList: [],
     }
     const err_msg = validateTask(newTask)
     if (err_msg) {
