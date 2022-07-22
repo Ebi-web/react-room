@@ -1,4 +1,4 @@
-import { useEffect, FC } from 'react'
+import { useEffect, FC, ChangeEvent, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { setTaskList } from '../src/stores/TaskListSlice'
 import { setLabelList } from '../src/stores/LabelListSlice'
@@ -13,6 +13,7 @@ import TaskList from '../src/components/TaskList'
 import LabelAdd from '../src/components/LabelAdd'
 
 const Index: FC<void> = () => {
+  const [searchString, setSearchString] = useState('')
   const dispatch = useDispatch()
 
   useEffect(() => {
@@ -33,10 +34,18 @@ const Index: FC<void> = () => {
         <div>
           <TaskAdd parentTaskId={null} />
         </div>
+        <form action="" className="flex justify-center">
+          <input
+            type="text"
+            className="my-8 rounded border border-black"
+            placeholder="search"
+            onChange={(e) => setSearchString(e.target.value)}
+          />
+        </form>
       </div>
 
       <div className="ml-8">
-        <TaskList parentTaskId={null} depth={0} />
+        <TaskList parentTaskId={null} depth={0} searchString={searchString} />
       </div>
 
       <LabelAdd />

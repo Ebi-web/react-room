@@ -22,6 +22,7 @@ import TaskAdd from './TaskAdd'
 interface TaskListTaskProps {
   depth: Number
   task: Task
+  searchString?: string
 }
 
 const TaskListTask: FC<TaskListTaskProps> = (props) => {
@@ -222,13 +223,11 @@ const TaskListTask: FC<TaskListTaskProps> = (props) => {
           </Menu>
         </div>
       </div>
-      {isOpenChildTaskList ? (
-        <>
-          <TaskList
-            parentTaskId={props.task.taskId}
-            depth={Number(props.depth) + 1}
-          />
-        </>
+      {isOpenChildTaskList && !props.searchString ? (
+        <TaskList
+          parentTaskId={props.task.taskId}
+          depth={Number(props.depth) + 1}
+        />
       ) : (
         ''
       )}
