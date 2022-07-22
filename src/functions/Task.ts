@@ -7,6 +7,13 @@ import type {
   GetTasksOneLevelDownArgs,
   Task,
 } from '../types/Task'
+import dayjs from 'dayjs'
+import { getAllTaskListFromLocalStorage } from './localStorage'
+import { isAfterOrSameByDate, isBeforeOrSameByDate } from './helpers/Dayjs'
+
+function validateDate(date: string, format: string): boolean {
+  return dayjs(date, format).format(format) === date
+}
 
 export function validateTask(task: Task): string {
   if (task.taskId.length !== 26) {
@@ -15,14 +22,40 @@ export function validateTask(task: Task): string {
   if (task.taskName === '') {
     return 'タスク名を入力してください'
   }
-  const currentDate = new Date()
-  const dueDate = new Date(task.dueDate)
-  if (isNaN(dueDate.getDate())) {
+
+  const currentDate = dayjs()
+  const dueDate = dayjs(task.dueDate)
+  if (!validateDate(task.dueDate, DateFormat)) {
     return '期限が不正です'
   }
-  if (dueDate.getTime() < currentDate.getTime()) {
+  if (!isAfterOrSameByDate(currentDate, dueDate)) {
     return '締め切り日は未来の日付にしてください'
   }
+
+  const tasks = getAllTaskListFromLocalStorage()
+  //check if all parent tasks dueDate is before dueDate of current task
+  const parentTasks = getAllParentTasks({
+    task,
+    tasksInState: tasks,
+  })
+  if (parentTasks.length !== 0) {
+    const parentTasksDueDate = parentTasks.map((t) => dayjs(t.dueDate))
+    if (parentTasksDueDate.some((d) => !isAfterOrSameByDate(d, dueDate))) {
+      return 'タスクの期限は全ての親タスクよりも後でなければなりません'
+    }
+  }
+  //check if all child tasks dueDate is after dueDate of current task
+  const childTasks = getAllChildTasks({
+    task,
+    tasksInState: tasks,
+  })
+  if (childTasks.length !== 0) {
+    const childTasksDueDate = childTasks.map((t) => dayjs(t.dueDate))
+    if (childTasksDueDate.some((d) => !isBeforeOrSameByDate(d, dueDate))) {
+      return 'タスクの期限は全ての子タスクよりも前でなければなりません'
+    }
+  }
+
   return ''
 }
 
@@ -47,6 +80,7 @@ function getAllChildTasks(args: GetAllChildTasksArgs): Task[] {
   }, childTasks)
 }
 
+//stateじゃなくて、全部localStorageから取ってくるようにしたい
 function getParentTask(args: GetParentTaskArgs): Task | undefined {
   if (args.task.parentTaskId === null) {
     return undefined
