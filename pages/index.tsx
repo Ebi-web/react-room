@@ -8,22 +8,13 @@ import TaskClear from '../src/components/TaskClear'
 import TaskList from '../src/components/TaskList'
 
 const Index: FC<void> = () => {
-  const [search, setSearch] = useState('')
-  const [isSearch, setIsSearch] = useState(true)
+  const [searchString, setSearchString] = useState('')
   const dispatch = useDispatch()
 
   useEffect(() => {
     const loadedTaskList = getAllTaskListFromLocalStorage()
     dispatch(setTaskList(loadedTaskList))
   }, [])
-
-  useEffect(() => {
-    if (search.length > 0) {
-      setIsSearch(false)
-    } else {
-      setIsSearch(true)
-    }
-  }, [search])
 
   return (
     <>
@@ -39,20 +30,15 @@ const Index: FC<void> = () => {
         <form action="" className="flex justify-center">
           <input
             type="text"
-            className="my-8  rounded border border-black"
+            className="my-8 rounded border border-black"
             placeholder="search"
-            onChange={(e) => setSearch(e.target.value)}
+            onChange={(e) => setSearchString(e.target.value)}
           />
         </form>
       </div>
 
       <div className="ml-8">
-        <TaskList
-          parentTaskId={null}
-          depth={0}
-          search={search}
-          isSearch={isSearch}
-        />
+        <TaskList parentTaskId={null} depth={0} searchString={searchString} />
       </div>
     </>
   )

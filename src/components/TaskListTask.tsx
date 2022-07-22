@@ -16,7 +16,7 @@ import TaskAdd from './TaskAdd'
 interface TaskListTaskProps {
   depth: Number
   task: Task
-  searchNow?: boolean
+  searchString?: string
 }
 
 const TaskListTask: FC<TaskListTaskProps> = (props) => {
@@ -109,26 +109,11 @@ const TaskListTask: FC<TaskListTaskProps> = (props) => {
           締め切り: {props.task.dueDate}
         </p>
       </div>
-      {isOpenChildTaskList ? (
-        <>
-          {props.searchNow ? (
-            <>
-              <TaskList
-                parentTaskId={props.task.taskId}
-                depth={Number(props.depth) + 1}
-                isSearch={false}
-              />
-            </>
-          ) : (
-            <>
-              <TaskList
-                parentTaskId={props.task.taskId}
-                depth={Number(props.depth) + 1}
-                isSearch={true}
-              />
-            </>
-          )}
-        </>
+      {isOpenChildTaskList && !props.searchString ? (
+        <TaskList
+          parentTaskId={props.task.taskId}
+          depth={Number(props.depth) + 1}
+        />
       ) : (
         ''
       )}
