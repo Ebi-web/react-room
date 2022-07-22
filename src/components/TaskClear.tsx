@@ -4,7 +4,7 @@ import { clearTaskList } from '../stores/TaskListSlice'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTrashCan } from '@fortawesome/free-solid-svg-icons'
 
-const TaskClear: FC<{}> = () => {
+const TaskClear: FC = () => {
   const dispatch = useDispatch()
 
   return (
