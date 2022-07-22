@@ -1,20 +1,23 @@
 import { FC, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import { Menu } from '@mantine/core'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
   faAngleRight,
   faAngleDown,
-  faPlus,
   faTrashCan,
+  faTags,
+  faXmark,
 } from '@fortawesome/free-solid-svg-icons'
-import { RootState } from '../stores/store'
-import { deleteTask, setTaskList } from '../stores/TaskListSlice'
-import { setParentTaskId } from '../stores/TaskAddSlice'
+import type { RootState } from '../stores/store'
+import { deleteTask, updateTask, setTaskList } from '../stores/TaskListSlice'
+import { setIsOpenLabelAdd } from '../stores/ModalSlice'
 import type { Task } from '../types/Task'
 import TaskList from './TaskList'
 import TaskEdit from './TaskEdit'
 import { validateClosingTask, validateReopeningTask } from '../functions/Task'
 import { showNotification } from '@mantine/notifications'
+import TaskAdd from './TaskAdd'
 
 interface TaskListTaskProps {
   depth: Number
@@ -24,6 +27,7 @@ interface TaskListTaskProps {
 const TaskListTask: FC<TaskListTaskProps> = (props) => {
   const [isOpenChildTaskList, setIsOpenChildTaskList] = useState(false)
   const taskListSelector = useSelector((state: RootState) => state.taskList)
+  const labelListSelector = useSelector((state: RootState) => state.labelList)
   const dispatch = useDispatch()
 
   const taskCount = taskListSelector.taskList.filter(
@@ -75,28 +79,54 @@ const TaskListTask: FC<TaskListTaskProps> = (props) => {
     })
   }
 
+  const giveLabeltoTask = (add_label_id: string) => {
+    const updateAssignLabelIdList = [
+      ...props.task.assignLabelIdList,
+      add_label_id,
+    ]
+    const newTask = {
+      ...props.task,
+      assignLabelIdList: updateAssignLabelIdList,
+    }
+    dispatch(updateTask(newTask))
+  }
+
+  const removeLabelFromTask = (remove_label_id: string) => {
+    const updateAssignLabelIdList = [...props.task.assignLabelIdList].filter(
+      (label_id) => label_id !== remove_label_id
+    )
+    const newTask = {
+      ...props.task,
+      assignLabelIdList: updateAssignLabelIdList,
+    }
+    dispatch(updateTask(newTask))
+  }
+
   return (
     <div>
       <div
-        className="border w-1/2 flex-col flex break-words mb-3 p-3 rounded-xl shadow-md cursor-pointer	hover:shadow-inner"
+        className="border w-1/2 flex-col flex break-words mb-3 p-3 rounded-xl shadow-md	hover:shadow-inner"
         data-testid={`task-${props.task.taskId}`}
         key={props.task.taskId}
       >
         <div className="flex gap-6">
-          <span className="m-1 select-none hover:opacity-50">
+          <span
+            className="pl-1 pr-1 select-none cursor-pointer hover:opacity-50"
+            onClick={() => {
+              setIsOpenChildTaskList(!isOpenChildTaskList)
+            }}
+          >
             <FontAwesomeIcon
               icon={isOpenChildTaskList ? faAngleDown : faAngleRight}
-              onClick={() => {
-                setIsOpenChildTaskList(!isOpenChildTaskList)
-              }}
             />
           </span>
-          <p>
+          <p className="select-none">
             {taskDoneCount}/{taskCount.length}
           </p>
           <input
             type="checkbox"
             checked={props.task.status}
+            className="cursor-pointer mt-1"
             onChange={() =>
               handleOnStatus(props.task.taskId, props.task.status)
             }
@@ -105,36 +135,92 @@ const TaskListTask: FC<TaskListTaskProps> = (props) => {
         <div className="flex justify-between">
           <span className="text-xl font-semibold">{props.task.taskName}</span>
           <div className="flex justify-between">
-            <TaskEdit task={props.task}></TaskEdit>
+            {/*edit task button*/}
+            <TaskEdit task={props.task} />
             {/*add task button*/}
-            <span className="m-1 select-none hover:opacity-50">
-              <FontAwesomeIcon
-                icon={faPlus}
-                onClick={() => {
-                  dispatch(setParentTaskId(props.task.taskId))
-                }}
-              />
-            </span>
-
+            <TaskAdd parentTaskId={props.task.taskId} />
             {/*delete task button*/}
-            <span className="m-1 select-none hover:opacity-50">
-              <FontAwesomeIcon
-                icon={faTrashCan}
-                onClick={() => {
-                  if (existChildTask()) {
-                    console.error('小タスクが存在します')
-                    alert('小タスクが存在します')
-                  } else {
-                    dispatch(deleteTask(props.task.taskId))
-                  }
-                }}
-              />
-            </span>
+            <button
+              className="border-2 m-5 p-2 hover:opacity-50"
+              onClick={() => {
+                if (existChildTask()) {
+                  console.error('小タスクが存在します')
+                  alert('小タスクが存在します')
+                } else {
+                  dispatch(deleteTask(props.task.taskId))
+                }
+              }}
+            >
+              <span className="m-1 select-none hover:opacity-50">
+                <FontAwesomeIcon icon={faTrashCan} />
+              </span>
+              <span>削除</span>
+            </button>
           </div>
         </div>
-        <p className="font-light mt-2 text-xs">
-          締め切り: {props.task.dueDate}
-        </p>
+        <div className="flex justify-between">
+          <span className="font-light mt-2 text-s">
+            締め切り: {props.task.dueDate}
+          </span>
+          {/* ラベルレイアウト */}
+          <div className="flex">
+            {labelListSelector.labelList
+              .filter((label) =>
+                props.task.assignLabelIdList.includes(label.id)
+              )
+              .map((label) => (
+                <div
+                  key={label.id}
+                  style={{ backgroundColor: label.color }}
+                  className="p-1 m-1 rounded"
+                >
+                  <span className="text-center w-20">{label.name}</span>
+                  <span
+                    className="pl-2  cursor-pointer"
+                    onClick={() => {
+                      removeLabelFromTask(label.id)
+                    }}
+                  >
+                    <FontAwesomeIcon icon={faXmark} />
+                  </span>
+                </div>
+              ))}
+          </div>
+          <Menu
+            control={
+              <button className="border-2 p-1 hover:opacity-50">
+                <FontAwesomeIcon icon={faTags} />
+                ラベル付け
+              </button>
+            }
+          >
+            {labelListSelector.labelList
+              .filter(
+                (label) => !props.task.assignLabelIdList.includes(label.id)
+              )
+              .map((label) => (
+                <Menu.Item
+                  key={label.id}
+                  style={{
+                    backgroundColor: label.color,
+                  }}
+                  onClick={() => {
+                    giveLabeltoTask(label.id)
+                  }}
+                >
+                  {label.name}
+                </Menu.Item>
+              ))}
+            <Menu.Item
+              onClick={() => {
+                // open modal
+                dispatch(setIsOpenLabelAdd(true))
+              }}
+            >
+              ラベル追加
+            </Menu.Item>
+          </Menu>
+        </div>
       </div>
       {isOpenChildTaskList ? (
         <>
