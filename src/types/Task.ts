@@ -50,12 +50,12 @@ type Task = {
 
 type DeleteTask = (taskId: string) => void
 
-export {
+export type {
   ParentTaskIdType,
   Task,
   DeleteTask,
   ChangeStatus,
-  Label
+  Label,
   ChangeStatusResponse,
   CheckTasksChangingStatus,
   GetTasksOneLevelDownArgs,
