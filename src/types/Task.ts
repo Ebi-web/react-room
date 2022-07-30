@@ -5,22 +5,18 @@ type ChangeStatus = boolean
 
 interface GetAllChildTasksArgs {
   task: Task
-  tasksInState: Task[]
 }
 
 interface GetAllParentTasksArgs {
   task: Task
-  tasksInState: Task[]
 }
 
 interface GetParentTaskArgs {
   task: Task
-  tasksInState: Task[]
 }
 
 interface GetTasksOneLevelDownArgs {
   task: Task
-  tasksInState: Task[]
 }
 
 interface CheckTasksChangingStatus {

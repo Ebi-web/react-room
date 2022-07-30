@@ -32,11 +32,9 @@ export function validateTask(task: Task): string {
     return '締め切り日は未来の日付にしてください'
   }
 
-  const tasks = getAllTaskListFromLocalStorage()
   //check if all parent tasks dueDate is before dueDate of current task
   const parentTasks = getAllParentTasks({
-    task,
-    tasksInState: tasks,
+    task: task,
   })
   if (parentTasks.length !== 0) {
     const parentTasksDueDate = parentTasks.map((t) => dayjs(t.dueDate))
@@ -46,8 +44,7 @@ export function validateTask(task: Task): string {
   }
   //check if all child tasks dueDate is after dueDate of current task
   const childTasks = getAllChildTasks({
-    task,
-    tasksInState: tasks,
+    task: task,
   })
   if (childTasks.length !== 0) {
     const childTasksDueDate = childTasks.map((t) => dayjs(t.dueDate))
@@ -61,8 +58,8 @@ export function validateTask(task: Task): string {
 
 // Get child tasks one level down when changing status
 function getTasksOneLevelDown(args: GetTasksOneLevelDownArgs): Task[] {
-  const { task, tasksInState } = args
-  return tasksInState.filter((t) => t.parentTaskId === task.taskId)
+  const tasks = getAllTaskListFromLocalStorage()
+  return tasks.filter((t) => t.parentTaskId === args.task.taskId)
 }
 
 function getAllChildTasks(args: GetAllChildTasksArgs): Task[] {
@@ -74,7 +71,6 @@ function getAllChildTasks(args: GetAllChildTasksArgs): Task[] {
     return acc.concat(
       getTasksOneLevelDown({
         task: t,
-        tasksInState: args.tasksInState,
       } as GetTasksOneLevelDownArgs)
     )
   }, childTasks)
@@ -85,21 +81,20 @@ function getParentTask(args: GetParentTaskArgs): Task | undefined {
   if (args.task.parentTaskId === null) {
     return undefined
   }
-  return args.tasksInState.find((t) => t.taskId === args.task.parentTaskId)
+  const tasks = getAllTaskListFromLocalStorage()
+
+  return tasks.find((t) => t.taskId === args.task.parentTaskId)
 }
 
 function getAllParentTasks(args: GetAllParentTasksArgs): Task[] {
   const parentTasks = [] as Task[]
-  let currentArgs = args
-  let parentTask: Task | undefined = getParentTask(currentArgs)
+  let parentTask: Task | undefined = getParentTask({ task: args.task })
 
   while (parentTask !== undefined) {
     parentTasks.push(parentTask)
-    currentArgs = {
+    parentTask = getParentTask({
       task: parentTask,
-      tasksInState: args.tasksInState,
-    }
-    parentTask = getParentTask(currentArgs)
+    })
   }
 
   return parentTasks
@@ -116,13 +111,9 @@ function areParentTasksOk(args: CheckTasksChangingStatus): boolean {
   return tasks.filter((t) => t.status === true).length === 0
 }
 
-export function validateClosingTask(
-  task: Task,
-  tasksInState: Task[]
-): ChangeStatusResponse {
+export function validateClosingTask(task: Task): ChangeStatusResponse {
   const tasks = getAllChildTasks({
     task,
-    tasksInState,
   } as GetAllChildTasksArgs)
   if (!areChildTasksOk({ tasks } as CheckTasksChangingStatus)) {
     return {
@@ -138,13 +129,9 @@ export function validateClosingTask(
   }
 }
 
-export function validateReopeningTask(
-  task: Task,
-  tasksInState: Task[]
-): ChangeStatusResponse {
+export function validateReopeningTask(task: Task): ChangeStatusResponse {
   const tasks = getAllParentTasks({
     task,
-    tasksInState,
   } as GetAllParentTasksArgs)
   if (!areParentTasksOk({ tasks } as CheckTasksChangingStatus)) {
     return {

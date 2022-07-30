@@ -51,8 +51,8 @@ const TaskListTask: FC<TaskListTaskProps> = (props) => {
 
     //validation
     const res = status
-      ? validateReopeningTask(props.task, deepCopy)
-      : validateClosingTask(props.task, deepCopy)
+      ? validateReopeningTask(props.task)
+      : validateClosingTask(props.task)
 
     //notify if validation is successful
     if (!res.success) {
