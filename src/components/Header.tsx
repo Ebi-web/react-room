@@ -1,10 +1,12 @@
 import { FC } from 'react'
 import { Header as MantineHeader } from '@mantine/core'
+import Setting from './Setting'
 
 const Header: FC = () => {
   return (
     <MantineHeader height={60} p="xs">
-      Jaguar(仮)
+      <span className="mr-5">Jaguar(仮)</span>
+      <Setting />
     </MantineHeader>
   )
 }

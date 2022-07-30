@@ -12,10 +12,10 @@ const TaskClear: FC = () => {
       className="border-2 m-5 p-2 hover:opacity-50"
       onClick={() => dispatch(clearTaskList())}
     >
-      <span>すべて削除</span>
       <span className="m-1">
         <FontAwesomeIcon icon={faTrashCan} />
       </span>
+      <span>すべて削除</span>
     </button>
   )
 }

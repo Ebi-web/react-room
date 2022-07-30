@@ -2,13 +2,13 @@ import { FC, FormEvent, useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { updateTask } from '../stores/TaskListSlice'
 import type { Task } from '../types/Task'
-import { Modal, TextInput, Button, Group, Box } from '@mantine/core'
+import { Modal, TextInput, Group, Box } from '@mantine/core'
 import { DatePicker } from '@mantine/dates'
+import { showNotification } from '@mantine/notifications'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faPencil, faPlus } from '@fortawesome/free-solid-svg-icons'
+import { faPencil } from '@fortawesome/free-solid-svg-icons'
 import dayjs from 'dayjs'
 import { DateFormat, validateTask } from '../functions/Task'
-import { showNotification } from '@mantine/notifications'
 
 interface EditAction {
   task: Task
@@ -40,6 +40,7 @@ const TaskEdit: FC<EditAction> = (props) => {
       return
     }
 
+    dispatch(updateTask(task))
     showNotification({
       message: 'タスクの編集に成功しました',
       autoClose: 5000,
@@ -47,21 +48,22 @@ const TaskEdit: FC<EditAction> = (props) => {
     })
     //clean up
     setOpened(false)
-
-    dispatch(updateTask(task))
   }
 
   return (
     <>
       {/*edit button*/}
-      <span className="m-1 select-none hover:opacity-50">
-        <FontAwesomeIcon
-          icon={faPencil}
-          onClick={() => {
-            setOpened(true)
-          }}
-        />
-      </span>
+      <button
+        className="border-2 m-5 p-2 hover:opacity-50"
+        onClick={() => {
+          setOpened(true)
+        }}
+      >
+        <span className="m-1 select-none hover:opacity-50">
+          <FontAwesomeIcon icon={faPencil} />
+          <span>編集</span>
+        </span>
+      </button>
 
       <Modal
         centered
