@@ -9,13 +9,13 @@ import { addTask } from '../stores/TaskListSlice'
 import { DatePicker } from '@mantine/dates'
 import dayjs from 'dayjs'
 import { showNotification } from '@mantine/notifications'
-import { Box, Group, Modal, TextInput, Button } from '@mantine/core'
+import { Box, Group, Modal, TextInput } from '@mantine/core'
 
 interface TaskAddParameters {
   parentTaskId: ParentTaskIdType
 }
 
-const TaskAdd: FC<TaskAddParameters> = (props) => {
+const ChildrenTaskAdd: FC<TaskAddParameters> = (props) => {
   // local
   const [opened, setOpened] = useState(false)
   const [inputTaskName, setInputTaskName] = useState('')
@@ -62,21 +62,17 @@ const TaskAdd: FC<TaskAddParameters> = (props) => {
   return (
     <>
       {/*edit button*/}
-      <Button
-        variant="outline"
-        color="dark"
-        radius="md"
-        size="md"
-        className="border-2 m-5 p-2 "
+      <button
+        className="m-3 p-2 hover:opacity-50"
         onClick={() => {
           setOpened(true)
         }}
       >
-        <span className="m-1 select-none ">
+        <span className="m-1 select-none hover:opacity-50">
           <FontAwesomeIcon icon={faPlus} />
         </span>
-        <span>新規タスク追加</span>
-      </Button>
+        <span></span>
+      </button>
 
       <Modal
         centered
@@ -118,4 +114,4 @@ const TaskAdd: FC<TaskAddParameters> = (props) => {
   )
 }
 
-export default TaskAdd
+export default ChildrenTaskAdd

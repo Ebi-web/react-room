@@ -24,32 +24,35 @@ const Index: FC<void> = () => {
   }, [])
 
   return (
-    <>
+    <div className="bg-white h-screen">
       <Header />
 
-      <div className="flex">
-        <div>
-          <TaskClear />
+      <div className="flex justify-between mr-10 ml-3">
+        <div className="flex mt-3">
+          <div>
+            <TaskClear />
+          </div>
+          <div>
+            <TaskAdd parentTaskId={null} />
+          </div>
         </div>
-        <div>
-          <TaskAdd parentTaskId={null} />
-        </div>
-        <form action="" className="flex justify-center">
+
+        <form>
           <input
             type="text"
-            className="my-8 rounded border border-black"
+            className=" w-80 my-8 rounded-lg border-2 border-black"
             placeholder="search"
             onChange={(e) => setSearchString(e.target.value)}
           />
         </form>
       </div>
 
-      <div className="ml-8">
+      <div className="m-8">
         <TaskList parentTaskId={null} depth={0} searchString={searchString} />
       </div>
 
       <LabelAdd />
-    </>
+    </div>
   )
 }
 

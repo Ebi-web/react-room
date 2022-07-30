@@ -4,8 +4,14 @@ import Setting from './Setting'
 
 const Header: FC = () => {
   return (
-    <MantineHeader height={60} p="xs">
-      <span className="mr-5">Jaguar(仮)</span>
+    <MantineHeader
+      height={80}
+      p="xs"
+      className="bg-main flex justify-between pl-7 pr-7"
+    >
+      <span className="mr-5 font-Cormorant font-medium text-4xl pt-2">
+        Jaguar
+      </span>
       <Setting />
     </MantineHeader>
   )
