@@ -54,14 +54,14 @@ const TaskEdit: FC<EditAction> = (props) => {
     <>
       {/*edit button*/}
       <button
-        className="border-2 m-5 p-2 hover:opacity-50"
+        className="m-3 p-2 hover:opacity-50"
         onClick={() => {
           setOpened(true)
         }}
       >
         <span className="m-1 select-none hover:opacity-50">
           <FontAwesomeIcon icon={faPencil} />
-          <span>編集</span>
+          <span></span>
         </span>
       </button>
 

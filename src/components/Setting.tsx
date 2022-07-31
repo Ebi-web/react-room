@@ -1,6 +1,6 @@
 import { FC, useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { Drawer } from '@mantine/core'
+import { Button, Drawer } from '@mantine/core'
 import { showNotification } from '@mantine/notifications'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faGear } from '@fortawesome/free-solid-svg-icons'
@@ -59,14 +59,18 @@ const Setting: FC = () => {
 
   return (
     <>
-      <button
+      <Button
+        variant="outline"
+        color="dark"
+        radius="md"
+        size="md"
         type="submit"
-        className="border-2 p-2  hover:opacity-50 rounded-md shadow-md hover:shadow-none"
+        className="border-2 mt-2 p-2  hover:opacity-50 rounded-md shadow-md hover:shadow-none"
         onClick={() => setOpened(true)}
       >
         <FontAwesomeIcon icon={faGear} />
         <span className="pl-1">設定</span>
-      </button>
+      </Button>
 
       <Drawer
         opened={opened}

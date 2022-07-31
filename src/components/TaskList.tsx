@@ -17,7 +17,7 @@ const TaskList: FC<TaskListProps> = (props) => {
   return (
     <div>
       {props.searchString ? (
-        <ul className="ml-4">
+        <ul className="m-4">
           {taskListSelector.taskList
             .filter(
               (task) =>
@@ -34,7 +34,7 @@ const TaskList: FC<TaskListProps> = (props) => {
             ))}
         </ul>
       ) : (
-        <ul className="ml-4">
+        <ul className="m-4">
           {taskListSelector.taskList
             .filter((task) => task.parentTaskId === props.parentTaskId)
             .map((task) => (
