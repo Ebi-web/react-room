@@ -6,7 +6,6 @@ export const getSortedTaskList = (
   sortKey: SortKeyType,
   sortPriorityLabelIdList: string[]
 ) => {
-  console.log(taskList, sortKey, sortPriorityLabelIdList)
   const sortByString = (a: string, b: string) => (a >= b ? 1 : -1)
   if (sortKey === 'none') {
     return [...taskList].sort((a, b) => sortByString(a.taskId, b.taskId))
@@ -35,5 +34,19 @@ export const getSortedTaskList = (
       sortByLabelPriority(a.assignLabelIdList, b.assignLabelIdList)
     )
   }
+
+  if (sortKey === 'status') {
+    //sort undone first
+    return [...taskList].sort((a, b) => {
+      if (!a.status && b.status) {
+        return -1
+      }
+      if (a.status && !b.status) {
+        return 1
+      }
+      return 0
+    })
+  }
+
   return [...taskList]
 }

@@ -7,6 +7,7 @@ const selectSortKeys: SortKeySelectType[] = [
   { value: 'none', label: '未設定' },
   { value: 'date:asc', label: '日付の昇順' },
   { value: 'label', label: 'ラベル順' },
+  { value: 'status', label: '完了ステータス順' },
 ]
 
 const SettingSort: FC<SortSettingProps> = ({
