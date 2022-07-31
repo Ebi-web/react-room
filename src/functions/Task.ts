@@ -38,8 +38,8 @@ export function validateTask(task: Task): string {
   })
   if (parentTasks.length !== 0) {
     const parentTasksDueDate = parentTasks.map((t) => dayjs(t.dueDate))
-    if (parentTasksDueDate.some((d) => !isAfterOrSameByDate(d, dueDate))) {
-      return 'タスクの期限は全ての親タスクよりも後でなければなりません'
+    if (parentTasksDueDate.some((d) => !isBeforeOrSameByDate(d, dueDate))) {
+      return 'タスクの期限は全ての親タスク以前でなければなりません'
     }
   }
   //check if all child tasks dueDate is after dueDate of current task
@@ -48,8 +48,8 @@ export function validateTask(task: Task): string {
   })
   if (childTasks.length !== 0) {
     const childTasksDueDate = childTasks.map((t) => dayjs(t.dueDate))
-    if (childTasksDueDate.some((d) => !isBeforeOrSameByDate(d, dueDate))) {
-      return 'タスクの期限は全ての子タスクよりも前でなければなりません'
+    if (childTasksDueDate.some((d) => !isAfterOrSameByDate(d, dueDate))) {
+      return 'タスクの期限は全ての子タスク以後でなければなりません'
     }
   }
 
