@@ -12,3 +12,24 @@ services:
     stdin_open: true
     environment:
       - CHOKIDAR_USEPOLLING=true
+  db:
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_bin
+    restart: always
+    image: mysql:8.0.30
+    ports:
+      - '3306:3306'
+    environment:
+      MYSQL_ROOT_PASSWORD: p@ssw0rd
+      MYSQL_USER: local
+      MYSQL_PASSWORD: p@ssw0rd
+      MYSQL_DATABASE: jaguar
+    volumes:
+      - data-volume:/var/lib/mysql
+  migration:
+    image: flyway/flyway
+    volumes:
+      - ./database/migration/schema:/flyway/sql
+    depends_on:
+      - db
+volumes:
+  data-volume:
