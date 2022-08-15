@@ -9,5 +9,5 @@ import "github.com/Ebi-web/react-room/graph/model"
 // It serves as dependency injection for your app, add any dependencies you require here.
 
 type Resolver struct{
-	todos []*model.Todo
+	tasks []*model.Task
 }

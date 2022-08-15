@@ -6,32 +6,42 @@ package graph
 import (
 	"context"
 	"fmt"
-	"math/rand"
 
 	"github.com/Ebi-web/react-room/graph/generated"
 	"github.com/Ebi-web/react-room/graph/model"
+	ulid "github.com/oklog/ulid/v2"
 )
 
-// CreateTodo is the resolver for the createTodo field.
-func (r *mutationResolver) CreateTodo(ctx context.Context, input model.NewTodo) (*model.Todo, error) {
-	todo := &model.Todo{
-		Text:   input.Text,
-		ID:     fmt.Sprintf("T%d", rand.Int()),
-		User:   &model.User{ID: input.UserID, Name: "user " + input.UserID},
-		UserID: input.UserID,
+// CreateTask is the resolver for the createTask field.
+func (r *mutationResolver) CreateTask(ctx context.Context, input model.NewTask) (*model.Task, error) {
+	task := &model.Task{
+		TaskID:   ulid.Make(),
+		TaskName: input.TaskName,
+		Status:   false,
+		DueDate:  input.DueDate,
 	}
-	r.todos = append(r.todos, todo)
-	return todo, nil
+	r.tasks = append(r.tasks, task)
+	return task, nil
 }
 
-// Todos is the resolver for the todos field.
-func (r *queryResolver) Todos(ctx context.Context) ([]*model.Todo, error) {
-	return r.todos, nil
+// UpdateTask is the resolver for the updateTask field.
+func (r *mutationResolver) UpdateTask(ctx context.Context, input model.UpdateTask) (*model.Task, error) {
+	panic(fmt.Errorf("not implemented"))
 }
 
-// User is the resolver for the user field.
-func (r *todoResolver) User(ctx context.Context, obj *model.Todo) (*model.User, error) {
-	return &model.User{ID: obj.UserID, Name: "user " + obj.UserID}, nil
+// DeleteTask is the resolver for the deleteTask field.
+func (r *mutationResolver) DeleteTask(ctx context.Context, input model.DeleteTask) (*model.Task, error) {
+	panic(fmt.Errorf("not implemented"))
+}
+
+// AllTasks is the resolver for the allTasks field.
+func (r *queryResolver) AllTasks(ctx context.Context) ([]*model.Task, error) {
+	return r.tasks, nil
+}
+
+// TaskID is the resolver for the taskID field.
+func (r *taskResolver) TaskID(ctx context.Context, obj *model.Task) (string, error) {
+	panic(fmt.Errorf("not implemented"))
 }
 
 // Mutation returns generated.MutationResolver implementation.
@@ -40,9 +50,9 @@ func (r *Resolver) Mutation() generated.MutationResolver { return &mutationResol
 // Query returns generated.QueryResolver implementation.
 func (r *Resolver) Query() generated.QueryResolver { return &queryResolver{r} }
 
-// Todo returns generated.TodoResolver implementation.
-func (r *Resolver) Todo() generated.TodoResolver { return &todoResolver{r} }
+// Task returns generated.TaskResolver implementation.
+func (r *Resolver) Task() generated.TaskResolver { return &taskResolver{r} }
 
 type mutationResolver struct{ *Resolver }
 type queryResolver struct{ *Resolver }
-type todoResolver struct{ *Resolver }
+type taskResolver struct{ *Resolver }

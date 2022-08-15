@@ -2,12 +2,18 @@
 
 package model
 
-type NewTodo struct {
-	Text   string `json:"text"`
-	UserID string `json:"userId"`
+type DeleteTask struct {
+	TaskID string `json:"taskID"`
 }
 
-type User struct {
-	ID   string `json:"id"`
-	Name string `json:"name"`
+type NewTask struct {
+	TaskName string `json:"taskName"`
+	DueDate  string `json:"dueDate"`
+}
+
+type UpdateTask struct {
+	TaskID   string `json:"taskID"`
+	TaskName string `json:"taskName"`
+	DueDate  string `json:"dueDate"`
+	Status   bool   `json:"status"`
 }

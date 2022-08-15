@@ -2,27 +2,36 @@
 #
 # https://gqlgen.com/getting-started/
 
-type Todo {
-  id: ID!
-  text: String!
-  done: Boolean!
-  user: User!
-}
-
-type User {
-  id: ID!
-  name: String!
+type Task {
+  taskID: ID!
+  taskName: String!
+  status: Boolean!
+#  TODO: dueDate should be a date type. Look at #47.
+  dueDate: String!
 }
 
 type Query {
-  todos: [Todo!]!
+  allTasks: [Task!]!
 }
 
-input NewTodo {
-  text: String!
-  userId: String!
+input NewTask {
+  taskName: String!
+  dueDate: String!
+}
+
+input UpdateTask {
+  taskID: ID!
+  taskName: String!
+  dueDate: String!
+  status: Boolean!
+}
+
+input DeleteTask {
+  taskID: ID!
 }
 
 type Mutation {
-  createTodo(input: NewTodo!): Todo!
+  createTask(input: NewTask!): Task!
+  updateTask(input: UpdateTask!): Task!
+  deleteTask(input: DeleteTask!): Task!
 }
