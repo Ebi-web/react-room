@@ -27,7 +27,7 @@ const Index: FC<void> = () => {
     <div className="bg-white h-screen">
       <Header />
 
-      <div className="flex justify-between mr-10 ml-3">
+      <div className="flex justify-between mr-10 ml-3 sm:flex-col">
         <div className="flex mt-3">
           <div>
             <TaskClear />
@@ -37,7 +37,7 @@ const Index: FC<void> = () => {
           </div>
         </div>
 
-        <form>
+        <form className="sm:ml-5">
           <input
             type="text"
             className=" w-80 my-8 rounded-lg border-2 border-black"

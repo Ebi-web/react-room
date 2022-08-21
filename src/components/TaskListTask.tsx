@@ -153,7 +153,7 @@ const TaskListTask: FC<TaskListTaskProps> = (props) => {
             <ChildrenTaskAdd parentTaskId={props.task.taskId} />
             {/*delete task button*/}
             <button
-              className="m-3 p-2 hover:opacity-50"
+              className="m-3 p-2 hover:opacity-50 sm:m-0"
               onClick={() => {
                 if (existChildTask()) {
                   console.error('小タスクが存在します')
@@ -194,7 +194,7 @@ const TaskListTask: FC<TaskListTaskProps> = (props) => {
             </div>
             <Menu
               control={
-                <button className="m-3 p-2 hover:opacity-50">
+                <button className="m-3 p-2 hover:opacity-50 sm:my-3 mx-0">
                   <span className="m-1 select-none hover:opacity-50">
                     <FontAwesomeIcon icon={faTags} />
                   </span>
