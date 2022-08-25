@@ -241,7 +241,7 @@ type Task {
   TaskID: ID!
   TaskName: String!
   Status: Boolean!
-#  TODO: dueDate should be a date type. Look at #47.
+  #  TODO: dueDate should be a date type. Look at #47.
   DueDate: String!
 }
 
@@ -268,7 +268,7 @@ input DeleteTask {
 type Mutation {
   createTask(input: NewTask!): Task!
   updateTask(input: UpdateTask!): Task!
-  deleteTask(input: DeleteTask!) : Task
+  deleteTask(input: DeleteTask!): Task
 }
 `, BuiltIn: false},
 }
