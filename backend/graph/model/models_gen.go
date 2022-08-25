@@ -3,17 +3,17 @@
 package model
 
 type DeleteTask struct {
-	TaskID string `json:"taskID"`
+	TaskID string `json:"TaskID"`
 }
 
 type NewTask struct {
-	TaskName string `json:"taskName"`
-	DueDate  string `json:"dueDate"`
+	TaskName string `json:"TaskName"`
+	DueDate  string `json:"DueDate"`
 }
 
 type UpdateTask struct {
-	TaskID   string `json:"taskID"`
-	TaskName string `json:"taskName"`
-	DueDate  string `json:"dueDate"`
-	Status   bool   `json:"status"`
+	TaskID   string `json:"TaskID"`
+	TaskName string `json:"TaskName"`
+	DueDate  string `json:"DueDate"`
+	Status   bool   `json:"Status"`
 }

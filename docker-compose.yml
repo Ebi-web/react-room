@@ -12,6 +12,20 @@ services:
     stdin_open: true
     environment:
       - CHOKIDAR_USEPOLLING=true
+  api:
+    build:
+      context: ./backend
+    command: reflex -r '\.go$$' -s -- sh -c 'go run ./server.go'
+    container_name: api
+    ports:
+      - '1027:1027'
+    volumes:
+      - ./backend:/app
+    working_dir: /app
+    environment:
+      - DATABASE_DATASOURCE=root:p@ssw0rd@tcp(db:3306)/jaguar?charset=utf8mb4&parseTime=True&loc=Local
+    depends_on:
+      - db
   db:
     container_name: db
     command: --character-set-server=utf8mb4 --collation-server=utf8mb4_bin

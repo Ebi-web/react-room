@@ -5,8 +5,8 @@ package graph
 
 import (
 	"context"
-	"fmt"
 
+	"github.com/Ebi-web/react-room/domain/repository"
 	"github.com/Ebi-web/react-room/graph/generated"
 	"github.com/Ebi-web/react-room/graph/model"
 	ulid "github.com/oklog/ulid/v2"
@@ -15,33 +15,50 @@ import (
 // CreateTask is the resolver for the createTask field.
 func (r *mutationResolver) CreateTask(ctx context.Context, input model.NewTask) (*model.Task, error) {
 	task := &model.Task{
-		TaskID:   ulid.Make(),
+		TaskID:   ulid.Make().String(),
 		TaskName: input.TaskName,
 		Status:   false,
 		DueDate:  input.DueDate,
 	}
-	r.tasks = append(r.tasks, task)
-	return task, nil
+	newTask, err := repository.CreateTask(r.DB, task)
+	if err != nil {
+		return nil, err
+	}
+
+	return newTask, nil
 }
 
 // UpdateTask is the resolver for the updateTask field.
 func (r *mutationResolver) UpdateTask(ctx context.Context, input model.UpdateTask) (*model.Task, error) {
-	panic(fmt.Errorf("not implemented"))
+	task := &model.Task{
+		TaskID:   input.TaskID,
+		TaskName: input.TaskName,
+		Status:   input.Status,
+		DueDate:  input.DueDate,
+	}
+	updatedTask, err := repository.UpdateTask(r.DB, task)
+	if err != nil {
+		return nil, err
+	}
+	return updatedTask, nil
 }
 
 // DeleteTask is the resolver for the deleteTask field.
 func (r *mutationResolver) DeleteTask(ctx context.Context, input model.DeleteTask) (*model.Task, error) {
-	panic(fmt.Errorf("not implemented"))
+	err := repository.DeleteTask(r.DB, input.TaskID)
+	if err != nil {
+		return nil, err
+	}
+	return nil, nil
 }
 
-// AllTasks is the resolver for the allTasks field.
-func (r *queryResolver) AllTasks(ctx context.Context) ([]*model.Task, error) {
-	return r.tasks, nil
-}
-
-// TaskID is the resolver for the taskID field.
-func (r *taskResolver) TaskID(ctx context.Context, obj *model.Task) (string, error) {
-	panic(fmt.Errorf("not implemented"))
+// ListTask is the resolver for the ListTask field.
+func (r *queryResolver) ListTask(ctx context.Context, taskIDs []string) ([]*model.Task, error) {
+	tasks, err := repository.ListTasks(r.DB, taskIDs)
+	if err != nil {
+		return nil, err
+	}
+	return tasks, nil
 }
 
 // Mutation returns generated.MutationResolver implementation.
@@ -50,9 +67,5 @@ func (r *Resolver) Mutation() generated.MutationResolver { return &mutationResol
 // Query returns generated.QueryResolver implementation.
 func (r *Resolver) Query() generated.QueryResolver { return &queryResolver{r} }
 
-// Task returns generated.TaskResolver implementation.
-func (r *Resolver) Task() generated.TaskResolver { return &taskResolver{r} }
-
 type mutationResolver struct{ *Resolver }
 type queryResolver struct{ *Resolver }
-type taskResolver struct{ *Resolver }

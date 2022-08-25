@@ -3,35 +3,35 @@
 # https://gqlgen.com/getting-started/
 
 type Task {
-  taskID: ID!
-  taskName: String!
-  status: Boolean!
+  TaskID: ID!
+  TaskName: String!
+  Status: Boolean!
 #  TODO: dueDate should be a date type. Look at #47.
-  dueDate: String!
+  DueDate: String!
 }
 
 type Query {
-  allTasks: [Task!]!
+  ListTask(taskIDs: [ID!]!): [Task!]!
 }
 
 input NewTask {
-  taskName: String!
-  dueDate: String!
+  TaskName: String!
+  DueDate: String!
 }
 
 input UpdateTask {
-  taskID: ID!
-  taskName: String!
-  dueDate: String!
-  status: Boolean!
+  TaskID: ID!
+  TaskName: String!
+  DueDate: String!
+  Status: Boolean!
 }
 
 input DeleteTask {
-  taskID: ID!
+  TaskID: ID!
 }
 
 type Mutation {
   createTask(input: NewTask!): Task!
   updateTask(input: UpdateTask!): Task!
-  deleteTask(input: DeleteTask!): Task!
+  deleteTask(input: DeleteTask!) : Task
 }
