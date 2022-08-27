@@ -142,11 +142,35 @@ const TaskListTask: FC<TaskListTaskProps> = (props) => {
           </div>
         </div>
         <div className="flex justify-between">
-          {/* タスク */}
+          {/* タスク名 */}
           <span className=" text-3xl ml-5 font-semibold font-Shippori pt-4 truncate ">
             {props.task.taskName}
           </span>
-          <div className="flex justify-between items-center">
+          {/* ラベルレイアウト */}
+          <div className="flex mt-4">
+            {labelListSelector.labelList
+              .filter((label) =>
+                props.task.assignLabelIdList.includes(label.id)
+              )
+              .map((label) => (
+                <div
+                  key={label.id}
+                  style={{ backgroundColor: label.color }}
+                  className="p-1 m-1 rounded h-8"
+                >
+                  <span className="text-center w-20">{label.name}</span>
+                  <span
+                    className="pl-2  cursor-pointer"
+                    onClick={() => {
+                      removeLabelFromTask(label.id)
+                    }}
+                  >
+                    <FontAwesomeIcon icon={faXmark} />
+                  </span>
+                </div>
+              ))}
+          </div>
+          <div className="flex justify-between">
             {/*edit task button*/}
             <TaskEdit task={props.task} />
             {/*add task button*/}
@@ -168,30 +192,6 @@ const TaskListTask: FC<TaskListTaskProps> = (props) => {
               </span>
               <span></span>
             </button>
-            {/* ラベルレイアウト */}
-            <div className="flex">
-              {labelListSelector.labelList
-                .filter((label) =>
-                  props.task.assignLabelIdList.includes(label.id)
-                )
-                .map((label) => (
-                  <div
-                    key={label.id}
-                    style={{ backgroundColor: label.color }}
-                    className="p-1 m-1 rounded"
-                  >
-                    <span className="text-center w-20">{label.name}</span>
-                    <span
-                      className="pl-2  cursor-pointer"
-                      onClick={() => {
-                        removeLabelFromTask(label.id)
-                      }}
-                    >
-                      <FontAwesomeIcon icon={faXmark} />
-                    </span>
-                  </div>
-                ))}
-            </div>
             <Menu
               control={
                 <button className="m-3 p-2 hover:opacity-50 sm:my-3 mx-0">
