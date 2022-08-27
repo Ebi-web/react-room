@@ -143,10 +143,10 @@ const TaskListTask: FC<TaskListTaskProps> = (props) => {
         </div>
         <div className="flex justify-between">
           {/* タスク */}
-          <span className=" text-3xl ml-5 font-semibold font-Shippori pt-4">
+          <span className=" text-3xl ml-5 font-semibold font-Shippori pt-4 truncate ">
             {props.task.taskName}
           </span>
-          <div className="flex justify-between">
+          <div className="flex justify-between items-center">
             {/*edit task button*/}
             <TaskEdit task={props.task} />
             {/*add task button*/}
