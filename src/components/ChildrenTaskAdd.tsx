@@ -63,7 +63,7 @@ const ChildrenTaskAdd: FC<TaskAddParameters> = (props) => {
     <>
       {/*edit button*/}
       <button
-        className="m-3 p-2 hover:opacity-50"
+        className="m-3 p-2 hover:opacity-50 sm:m-0"
         onClick={() => {
           setOpened(true)
         }}
