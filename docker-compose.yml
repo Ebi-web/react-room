@@ -12,3 +12,39 @@ services:
     stdin_open: true
     environment:
       - CHOKIDAR_USEPOLLING=true
+  api:
+    build:
+      context: ./backend
+    command: reflex -r '\.go$$' -s -- sh -c 'go run ./server.go'
+    container_name: api
+    ports:
+      - '1027:1027'
+    volumes:
+      - ./backend:/app
+    working_dir: /app
+    environment:
+      - DATABASE_DATASOURCE=root:p@ssw0rd@tcp(db:3306)/jaguar?charset=utf8mb4&parseTime=True&loc=Local
+    depends_on:
+      - db
+  db:
+    container_name: db
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_bin
+    image: mysql:8.0.30
+    ports:
+      - '3306:3306'
+    environment:
+      MYSQL_ROOT_PASSWORD: p@ssw0rd
+      MYSQL_USER: local
+      MYSQL_PASSWORD: p@ssw0rd
+      MYSQL_DATABASE: jaguar
+    volumes:
+      - data-volume:/var/lib/mysql
+  migration:
+    container_name: migration
+    image: flyway/flyway
+    volumes:
+      - ./database/migration/schema:/flyway/sql
+    depends_on:
+      - db
+volumes:
+  data-volume:
