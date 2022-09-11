@@ -18,7 +18,6 @@ import TaskEdit from './TaskEdit'
 import { validateClosingTask, validateReopeningTask } from '../functions/Task'
 import { showNotification } from '@mantine/notifications'
 import ChildrenTaskAdd from './ChildrenTaskAdd'
-import { Checkbox } from '@mantine/core'
 import { Tooltip } from './Tooltip'
 
 interface TaskListTaskProps {
@@ -130,14 +129,16 @@ const TaskListTask: FC<TaskListTaskProps> = (props) => {
             <p className="select-none">
               {taskDoneCount}/{taskCount.length}
             </p>
-            <input
-              type="checkbox"
-              checked={props.task.status}
-              className="cursor-pointer mt-1"
-              onChange={() =>
-                handleOnStatus(props.task.taskId, props.task.status)
-              }
-            />
+            <Tooltip tooltipText="完了">
+              <input
+                type="checkbox"
+                checked={props.task.status}
+                className="cursor-pointer mt-1"
+                onChange={() =>
+                  handleOnStatus(props.task.taskId, props.task.status)
+                }
+              />
+            </Tooltip>
           </div>
           <div>
             <span className="font-light text-s pr-5">
@@ -147,7 +148,7 @@ const TaskListTask: FC<TaskListTaskProps> = (props) => {
         </div>
         <div className="flex justify-between">
           {/* タスク名 */}
-          <span className=" text-3xl ml-5 font-semibold font-Shippori pt-4 truncate ">
+          <span className=" text-2xl ml-5 font-semibold font-Shippori pt-4 truncate tracking-tighter ">
             {props.task.taskName}
           </span>
           {/* ラベルレイアウト */}
