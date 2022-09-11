@@ -9,6 +9,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPencil } from '@fortawesome/free-solid-svg-icons'
 import dayjs from 'dayjs'
 import { DateFormat, validateTask } from '../functions/Task'
+import { Tooltip } from './Tooltip'
 
 interface EditAction {
   task: Task
@@ -59,10 +60,12 @@ const TaskEdit: FC<EditAction> = (props) => {
           setOpened(true)
         }}
       >
-        <span className="m-1 select-none hover:opacity-50">
-          <FontAwesomeIcon icon={faPencil} />
-          <span></span>
-        </span>
+        <Tooltip tooltipText="編集">
+          <span className="m-1 select-none hover:opacity-50">
+            <FontAwesomeIcon icon={faPencil} />
+            <span></span>
+          </span>
+        </Tooltip>
       </button>
 
       <Modal

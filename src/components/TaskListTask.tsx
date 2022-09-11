@@ -19,6 +19,7 @@ import { validateClosingTask, validateReopeningTask } from '../functions/Task'
 import { showNotification } from '@mantine/notifications'
 import ChildrenTaskAdd from './ChildrenTaskAdd'
 import { Checkbox } from '@mantine/core'
+import { Tooltip } from './Tooltip'
 
 interface TaskListTaskProps {
   depth: Number
@@ -105,7 +106,7 @@ const TaskListTask: FC<TaskListTaskProps> = (props) => {
   }
 
   return (
-    <div className="text-sub mb-10">
+    <div className="text-sub mb-5">
       <div
         className="bg-task border flex-col flex break-words mb-3 p-3 rounded-xl shadow-md	hover:shadow-inner hover:opacity-90"
         data-testid={`task-${props.task.taskId}`}
@@ -122,6 +123,9 @@ const TaskListTask: FC<TaskListTaskProps> = (props) => {
               <FontAwesomeIcon
                 icon={isOpenChildTaskList ? faAngleDown : faAngleRight}
               />
+              <span className="ml-3">
+                {isOpenChildTaskList ? `閉じる` : `開く`}
+              </span>
             </span>
             <p className="select-none">
               {taskDoneCount}/{taskCount.length}
@@ -187,17 +191,21 @@ const TaskListTask: FC<TaskListTaskProps> = (props) => {
                 }
               }}
             >
-              <span className="m-1 select-none hover:opacity-50">
-                <FontAwesomeIcon icon={faTrashCan} />
-              </span>
+              <Tooltip tooltipText="子タスク追加">
+                <span className="m-1 select-none hover:opacity-50">
+                  <FontAwesomeIcon icon={faTrashCan} />
+                </span>
+              </Tooltip>
               <span></span>
             </button>
             <Menu
               control={
                 <button className="m-3 p-2 hover:opacity-50 sm:my-3 mx-0">
-                  <span className="m-1 select-none hover:opacity-50">
-                    <FontAwesomeIcon icon={faTags} />
-                  </span>
+                  <Tooltip tooltipText="ラベル追加">
+                    <span className="m-1 select-none hover:opacity-50">
+                      <FontAwesomeIcon icon={faTags} />
+                    </span>
+                  </Tooltip>
                 </button>
               }
             >
