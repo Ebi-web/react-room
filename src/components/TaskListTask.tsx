@@ -142,7 +142,7 @@ const TaskListTask: FC<TaskListTaskProps> = (props) => {
           </div>
           <div>
             <span className="font-light text-s pr-5">
-              締め切り: {props.task.dueDate}
+              開始:{props.task.startDate} ～ 締め切り:{props.task.dueDate}
             </span>
           </div>
         </div>

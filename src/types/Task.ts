@@ -39,6 +39,7 @@ type Task = {
   taskId: string // ulid
   parentTaskId: ParentTaskIdType
   taskName: string
+  startDate: string
   dueDate: string
   status: ChangeStatus
   assignLabelIdList: string[]

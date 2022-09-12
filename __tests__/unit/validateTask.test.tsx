@@ -7,7 +7,9 @@ describe('タスク追加バリデーション', () => {
       taskId: '01G6NM6EJ7C35J6ZHF6Z3CHGVK',
       parentTaskId: null,
       taskName: 'タスク名',
+      startDate: '2022-09-20',
       dueDate: '2222-06-29',
+      assignLabelIdList: [],
       status: false,
     }
 
@@ -20,7 +22,9 @@ describe('タスク追加バリデーション', () => {
       taskId: '1',
       parentTaskId: null,
       taskName: 'タスク名',
+      startDate: '2022-09-20',
       dueDate: '2222-06-29',
+      assignLabelIdList: [],
       status: false,
     }
 
@@ -33,7 +37,9 @@ describe('タスク追加バリデーション', () => {
       taskId: '01G6NM6EJ7C35J6ZHF6Z3CHGVK',
       parentTaskId: null,
       taskName: '',
+      startDate: '2022-09-20',
       dueDate: '2222-06-29',
+      assignLabelIdList: [],
       status: false,
     }
     const err_msg = validateTask(task)
@@ -45,7 +51,9 @@ describe('タスク追加バリデーション', () => {
       taskId: '01G6NM6EJ7C35J6ZHF6Z3CHGVK',
       parentTaskId: null,
       taskName: 'タスク名',
-      dueDate: '2222-06-29--------',
+      startDate: '2022-09-20',
+      dueDate: '2222-06-29-----------------',
+      assignLabelIdList: [],
       status: false,
     }
     const err_msg = validateTask(task)
@@ -57,7 +65,9 @@ describe('タスク追加バリデーション', () => {
       taskId: '01G6NM6EJ7C35J6ZHF6Z3CHGVK',
       parentTaskId: null,
       taskName: 'タスク名',
+      startDate: '2022-09-20',
       dueDate: '2000-06-29',
+      assignLabelIdList: [],
       status: false,
     }
     const err_msg = validateTask(task)
