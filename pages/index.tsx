@@ -24,7 +24,7 @@ const Index: FC<void> = () => {
   }, [])
 
   return (
-    <div className="bg-white h-screen">
+    <div className="bg-white min-h-screen">
       <Header />
 
       <div className="flex justify-between mr-10 ml-3 sm:flex-col">
@@ -47,7 +47,7 @@ const Index: FC<void> = () => {
         </form>
       </div>
 
-      <div className="m-8">
+      <div className=" mx-8 mt-8">
         <TaskList parentTaskId={null} depth={0} searchString={searchString} />
       </div>
 
