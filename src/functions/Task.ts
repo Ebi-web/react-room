@@ -25,11 +25,18 @@ export function validateTask(task: Task): string {
 
   const currentDate = dayjs()
   const dueDate = dayjs(task.dueDate)
-  if (!validateDate(task.dueDate, DateFormat)) {
+  if (
+    !validateDate(task.dueDate, DateFormat) ||
+    !validateDate(task.startDate, DateFormat)
+  ) {
     return '期限が不正です'
   }
   if (!isAfterOrSameByDate(currentDate, dueDate)) {
     return '締め切り日は未来の日付にしてください'
+  }
+
+  if (task.startDate > task.dueDate) {
+    return '開始日は締め切り日より前の日付にしてください'
   }
 
   //check if all parent tasks dueDate is before dueDate of current task

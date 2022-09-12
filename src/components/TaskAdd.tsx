@@ -19,7 +19,8 @@ const TaskAdd: FC<TaskAddParameters> = (props) => {
   // local
   const [opened, setOpened] = useState(false)
   const [inputTaskName, setInputTaskName] = useState('')
-  const [inputDate, setInputDate] = useState(new Date())
+  const [inputStartDate, setInputStartDate] = useState(new Date())
+  const [inputDueDate, setInputDueDate] = useState(new Date())
   const dispatch = useDispatch()
 
   const addTaskLocal = (e: FormEvent<HTMLFormElement>) => {
@@ -28,10 +29,12 @@ const TaskAdd: FC<TaskAddParameters> = (props) => {
       taskId: ulid(),
       parentTaskId: props.parentTaskId,
       taskName: inputTaskName,
-      dueDate: dayjs(inputDate).format(DateFormat),
+      startDate: dayjs(inputStartDate).format(DateFormat),
+      dueDate: dayjs(inputDueDate).format(DateFormat),
       status: false,
       assignLabelIdList: [],
     }
+    console.warn(newTask)
     const err_msg = validateTask(newTask)
     if (err_msg) {
       showNotification({
@@ -94,12 +97,22 @@ const TaskAdd: FC<TaskAddParameters> = (props) => {
             />
 
             <DatePicker
+              placeholder="開始日を選択してください"
+              label="開始日"
+              required
+              value={inputStartDate}
+              onChange={(e) =>
+                e == null ? setInputStartDate(new Date()) : setInputStartDate(e)
+              }
+            />
+
+            <DatePicker
               placeholder="締切日を選択してください"
               label="締切日"
               required
-              value={inputDate}
+              value={inputDueDate}
               onChange={(e) =>
-                e == null ? setInputDate(new Date()) : setInputDate(e)
+                e == null ? setInputDueDate(new Date()) : setInputDueDate(e)
               }
             />
 
