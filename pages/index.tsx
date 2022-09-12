@@ -29,10 +29,10 @@ const Index: FC<void> = () => {
   }, [])
 
   return (
-    <div className="bg-white h-screen">
+    <div className="bg-white min-h-screen">
       <Header />
 
-      <div className="flex justify-between mr-10 ml-3">
+      <div className="flex justify-between mr-10 ml-3 sm:flex-col">
         <div className="flex mt-3">
           <div>
             <TaskClear />
@@ -59,7 +59,7 @@ const Index: FC<void> = () => {
           </Button>
 
           {/** Search */}
-          <form>
+          <form className="sm:ml-5">
             <input
               type="text"
               className="w-80 rounded-lg border-2 border-black"
@@ -70,7 +70,7 @@ const Index: FC<void> = () => {
         </div>
       </div>
 
-      <div className="m-8">
+      <div className="mx-8 mt-8">
         {isCalenderView ? (
           <TaskCalenderList />
         ) : (

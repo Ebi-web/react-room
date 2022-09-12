@@ -10,6 +10,7 @@ import { DatePicker } from '@mantine/dates'
 import dayjs from 'dayjs'
 import { showNotification } from '@mantine/notifications'
 import { Box, Group, Modal, TextInput } from '@mantine/core'
+import { Tooltip } from './Tooltip'
 
 interface TaskAddParameters {
   parentTaskId: ParentTaskIdType
@@ -65,14 +66,16 @@ const ChildrenTaskAdd: FC<TaskAddParameters> = (props) => {
     <>
       {/*edit button*/}
       <button
-        className="m-3 p-2 hover:opacity-50"
+        className="m-3 p-2 hover:opacity-50 sm:m-0"
         onClick={() => {
           setOpened(true)
         }}
       >
-        <span className="m-1 select-none hover:opacity-50">
-          <FontAwesomeIcon icon={faPlus} />
-        </span>
+        <Tooltip tooltipText="子タスク追加">
+          <span className="m-1 select-none hover:opacity-50">
+            <FontAwesomeIcon icon={faPlus} />
+          </span>
+        </Tooltip>
         <span></span>
       </button>
 

@@ -16,6 +16,12 @@ module.exports = {
         Pacifico: ['Pacifico'],
       },
     },
+    screens: {
+      sm: { max: '440px' },
+      md: '768px',
+      lg: '1024px',
+      xl: '1280px',
+    },
   },
   plugins: [
     require('@tailwindcss/forms'),
